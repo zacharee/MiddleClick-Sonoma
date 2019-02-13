@@ -3,7 +3,7 @@
 //  MiddleClick
 //
 //  Created by Alex Galonsky on 11/9/09.
-//  Extended by Pascal Hartman on 13.02.2019
+//  Extended by Pascal Hartmann on 13.02.2019
 //
 
 #import "Controller.h"
@@ -13,6 +13,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h> 
 #import "WakeObserver.h"
+#include "TrayMenu.h"
 
 /***************************************************************************
  *
@@ -45,15 +46,24 @@ void MTRegisterContactFrameCallback(MTDeviceRef, MTContactCallbackFunction);
 void MTDeviceStart(MTDeviceRef, int); // thanks comex
 void MTDeviceStop(MTDeviceRef);
 
+NSDate *touchStartTime;
+float middleclickX, middleclickY;
+float middleclickX2, middleclickY2;
 MTDeviceRef dev;
 
+BOOL needToClick;
 BOOL threeDown;
+BOOL maybeMiddleClick;
 BOOL wasThreeDown;
+
 @implementation Controller
 
-- (void) start
-{
+- (void) start {
 	threeDown = NO;
+    wasThreeDown = NO;
+    
+    needToClick = [[NSUserDefaults standardUserDefaults] boolForKey:@"need_to_click"];
+    
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
     [NSApplication sharedApplication];
 	
@@ -92,52 +102,122 @@ BOOL wasThreeDown;
     CGEventTapEnable(eventTap, true);
     
     // Set it all running.
-    CFRunLoopRun();
+   
+    TrayMenu *menu = [[TrayMenu alloc] initWithController:self];
+    [NSApp setDelegate:menu];
     [NSApp run];
+    CFRunLoopRun();
     
     //release pool before exit
 	[pool release];
 }
 
+- (BOOL)getClickMode {
+    return needToClick;
+}
+
+- (void)setMode:(BOOL)click {
+    [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"need_to_click"];
+    needToClick = click;
+}
+
 //listening to mouse clicks to replace them with middle clicks if there are 3 fingers down at the time of clicking
 //this is done by replacing the left click down with a other click down and setting the button number to middle click when
-//3 fingers are down when clicking, and by replacing left click up with other click up and setting thre button numeber to middle click
+//3 fingers are down when clicking, and by replacing left click up with other click up and setting three button number to middle click
 //when 3 fingers were down when the last click went down.
 CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
-    
-    if (threeDown && type == kCGEventLeftMouseDown) {
-        wasThreeDown = true;
-        CGEventSetType(event, kCGEventOtherMouseDown);
-        CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
+    if(needToClick){
+        if (threeDown && type == kCGEventLeftMouseDown) {
+            wasThreeDown = true;
+            CGEventSetType(event, kCGEventOtherMouseDown);
+            CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
+        }
+        
+        if (wasThreeDown && type == kCGEventLeftMouseUp) {
+            wasThreeDown = false;
+            CGEventSetType(event, kCGEventOtherMouseUp);
+            CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
+        }        
     }
-    
-    if (wasThreeDown && type == kCGEventLeftMouseUp) {
-        wasThreeDown = false;
-        CGEventSetType(event, kCGEventOtherMouseUp);
-        CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
-    }
-    
     return event;
 }
 
 //mulittouch callback, see what is touched. If 3 are on the mouse set threedowns, else unset threedowns.
 int touchCallback(int device, Finger *data, int nFingers, double timestamp, int frame) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
-   
-	if(nFingers == 3){
-        if(!threeDown){
-            threeDown = YES;
+    
+    if(needToClick) {
+        if(nFingers == 3){
+            if(!threeDown){
+                threeDown = YES;
+            }
+        }
+        
+        if(nFingers == 0){
+            if(threeDown){
+                threeDown = NO;
+            }
         }
     }
-		
-    if(nFingers == 0){
-        if(threeDown){
-            threeDown = NO;
+    else {
+        if (nFingers==0) {
+            touchStartTime = NULL;
+            if(middleclickX+middleclickY) {
+                float delta = ABS(middleclickX-middleclickX2)+ABS(middleclickY-middleclickY2);
+                if (delta < 0.4f) {
+                    // Emulate a middle click
+                    
+                    // get the current pointer location
+                    CGEventRef ourEvent = CGEventCreate(NULL);
+                    CGPoint ourLoc = CGEventGetLocation(ourEvent);
+                    
+                    CGEventPost (kCGHIDEventTap, CGEventCreateMouseEvent (NULL,kCGEventOtherMouseDown,ourLoc,kCGMouseButtonCenter));
+                    CGEventPost (kCGHIDEventTap, CGEventCreateMouseEvent (NULL,kCGEventOtherMouseUp,ourLoc,kCGMouseButtonCenter));
+                    
+                }
+            }
+        } else if (nFingers>0 && touchStartTime == NULL) {
+            NSDate *now = [[NSDate alloc] init];
+            touchStartTime = [now retain];
+            [now release];
+            
+            maybeMiddleClick = YES;
+            middleclickX = 0.0f;
+            middleclickY = 0.0f;
+        } else {
+            if (maybeMiddleClick==YES){
+                NSTimeInterval elapsedTime = -[touchStartTime timeIntervalSinceNow];
+                if (elapsedTime > 0.5f)
+                    maybeMiddleClick = NO;
+            }
+        }
+        
+        if (nFingers>3) {
+            maybeMiddleClick = NO;
+            middleclickX = 0.0f;
+            middleclickY = 0.0f;
+        }
+        
+        if (nFingers==3) {
+            Finger *f1 = &data[0];
+            Finger *f2 = &data[1];
+            Finger *f3 = &data[2];
+            
+            if (maybeMiddleClick==YES) {
+                middleclickX = (f1->normalized.pos.x+f2->normalized.pos.x+f3->normalized.pos.x);
+                middleclickY = (f1->normalized.pos.y+f2->normalized.pos.y+f3->normalized.pos.y);
+                middleclickX2 = middleclickX;
+                middleclickY2 = middleclickY;
+                maybeMiddleClick=NO;
+            } else {
+                middleclickX2 = (f1->normalized.pos.x+f2->normalized.pos.x+f3->normalized.pos.x);
+                middleclickY2 = (f1->normalized.pos.y+f2->normalized.pos.y+f3->normalized.pos.y);
+            }
         }
     }
-	
-	[pool release];
-	return 0;
+    
+    [pool release];
+    return 0;
 }
 
 @end
