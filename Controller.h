@@ -3,7 +3,7 @@
 //  MiddleClick
 //
 //  Created by Alex Galonsky on 11/9/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Extended by Pascal Hartman on 13.02.2019
 //
 
 #import <Cocoa/Cocoa.h>
@@ -14,7 +14,5 @@
 }
 
 - (void) start;
-- (void)setMode:(BOOL)click;
-- (BOOL)getClickMode;
 
 @end
