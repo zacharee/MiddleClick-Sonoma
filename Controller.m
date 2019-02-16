@@ -128,16 +128,19 @@ BOOL wasThreeDown;
 CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
     if(needToClick){
         if (threeDown && type == kCGEventLeftMouseDown) {
-            wasThreeDown = true;
+            wasThreeDown = YES;
             CGEventSetType(event, kCGEventOtherMouseDown);
             CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
+            threeDown=NO;
         }
         
         if (wasThreeDown && type == kCGEventLeftMouseUp) {
-            wasThreeDown = false;
+            wasThreeDown = NO;
             CGEventSetType(event, kCGEventOtherMouseUp);
             CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber, kCGMouseButtonCenter);
-        }        
+        }
+        
+        
     }
     return event;
 }
