@@ -156,7 +156,7 @@ int touchCallback(int device, Finger *data, int nFingers, double timestamp, int 
             }
         }
         
-        if(nFingers == 0){
+        if(nFingers != 3){
             if(threeDown){
                 threeDown = NO;
             }
