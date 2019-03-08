@@ -6,11 +6,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface WakeObserver : NSObject {
-
 }
 
-- (void) receiveWakeNote: (NSNotification*) note;
+- (void)receiveWakeNote:(NSNotification *)note;
 
 @end
