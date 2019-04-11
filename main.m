@@ -5,15 +5,21 @@
 //  Created by Clem on 21.06.09.
 //
 
-
 #import "Controller.h"
+#import "TrayMenu.h"
 
-Controller *con;
+int main(int argc, char* argv[])
+{
+    NSApplication* app = [NSApplication sharedApplication];
 
-int main(int argc, char *argv[]) {
-	
-	con = [[Controller alloc] init];
-	[con start];
-    
+    Controller* con = [[Controller alloc] init];
+    [con start];
+
+    // add traymenu
+    TrayMenu* menu = [[TrayMenu alloc] initWithController:con];
+    [app setDelegate:menu];
+
+    [app run];
+
     return EXIT_SUCCESS;
 }
