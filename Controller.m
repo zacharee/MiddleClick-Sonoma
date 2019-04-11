@@ -63,6 +63,7 @@ BOOL wasThreeDown;
 
 - (void)start
 {
+   
     threeDown = NO;
     wasThreeDown = NO;
 
@@ -83,12 +84,14 @@ BOOL wasThreeDown;
         MTDeviceStart((MTDeviceRef)[deviceList objectAtIndex:i],
             0); // start sending events
     }
+    
     // register a callback to know when osx come back from sleep
     [[[NSWorkspace sharedWorkspace] notificationCenter]
         addObserver:self
            selector:@selector(receiveWakeNote:)
                name:NSWorkspaceDidWakeNotification
              object:NULL];
+    
     // Register IOService notifications for added devices.
     IONotificationPortRef port = IONotificationPortCreate(kIOMasterPortDefault);
     CFRunLoopAddSource(CFRunLoopGetMain(),
@@ -112,7 +115,12 @@ BOOL wasThreeDown;
             CFRelease(item);
         }
     }
-    // we only want to see left mouse down and left mouse up, because we onky wnat
+    
+    // when displays are reconfigured restart of the app is needed, so add a calback to the
+    // reconifguration of Core Graphics
+    CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, self);
+    
+    // we only want to see left mouse down and left mouse up, because we only want
     // to change that one
     CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
 
@@ -134,10 +142,6 @@ BOOL wasThreeDown;
 
     // Enable the event tap.
     CGEventTapEnable(eventTap, true);
-
-    // Set it all running.
-    
-    //CFRunLoopRun();
 
     // release pool before exit
     [pool release];
@@ -286,21 +290,19 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
 /// Relaunch the app when devices are connected/invalidated.
 static void restartApp()
 {
-    NSString* relaunch = [[[NSBundle mainBundle] resourcePath]
-        stringByAppendingPathComponent:@"relaunch"];
-    int procid = [[NSProcessInfo processInfo] processIdentifier];
-    [NSTask launchedTaskWithLaunchPath:relaunch
-                             arguments:[NSArray
-                                           arrayWithObjects:
-                                               [[NSBundle mainBundle] bundlePath],
-                                           [NSString stringWithFormat:@"%d",
-                                                     procid],
-                                           nil]];
+    NSTask *task = [[[NSTask alloc] init] autorelease];
+    NSMutableArray *args = [NSMutableArray array];
+    [args addObject:@"-c"];
+    [args addObject:[NSString stringWithFormat:@"sleep %f; open \"%@\"", 1.0, [[NSBundle mainBundle] bundlePath]]];
+    [task setLaunchPath:@"/bin/sh"];
+    [task setArguments:args];
+    [task launch];
+    
     [NSApp terminate:NULL];
 }
 
 /// Callback when a multitouch device is added.
-static void multitouchDeviceAddedCallback(void* _controller,
+void multitouchDeviceAddedCallback(void* _controller,
     io_iterator_t iterator)
 {
     /// Loop through all the returned items.
@@ -313,5 +315,17 @@ static void multitouchDeviceAddedCallback(void* _controller,
     Controller* controller = (Controller*)_controller;
     [controller scheduleRestart:2];
 }
+
+void displayReconfigurationCallBack(CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags, void* _controller)
+{
+    if(flags & kCGDisplaySetModeFlag || flags & kCGDisplayAddFlag || flags & kCGDisplayRemoveFlag || flags & kCGDisplayDisabledFlag)
+    {
+        NSLog(@"Display reconfigured, restarting...");
+        Controller* controller = (Controller*)_controller;
+        [controller scheduleRestart:2];
+    }
+}
+
+
 
 @end
