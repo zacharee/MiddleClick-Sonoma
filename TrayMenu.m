@@ -7,6 +7,7 @@
 
 #import "TrayMenu.h"
 #import "Controller.h"
+#import <Cocoa/Cocoa.h>
 
 @implementation TrayMenu
 
@@ -99,7 +100,8 @@
 
     // Check if Darkmode menubar is supported and enable templating of the icon in
     // that case.
-    NSImage* icon = [NSImage imageNamed:@"mouse"];
+    
+    NSImage* icon = [NSApp applicationIconImage];
     [icon setSize:CGSizeMake(19, 19)];
 
     BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
