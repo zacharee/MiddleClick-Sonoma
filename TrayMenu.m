@@ -22,7 +22,7 @@
 - (void)openWebsite:(id)sender
 {
     NSURL* url = [NSURL
-        URLWithString:@"http://clement.beffa.org/labs/projects/middleclick/"];
+        URLWithString:@"https://github.com/DaFuqtor/MiddleClick"];
     [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
@@ -87,7 +87,7 @@
     // Add Quit Action
     menuItem = [menu addItemWithTitle:@"Quit"
                                action:@selector(actionQuit:)
-                        keyEquivalent:@""];
+                        keyEquivalent:@"q"];
 
     [menuItem setTarget:self];
 
@@ -96,28 +96,29 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
-    NSMenu* menu = [self createMenu];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hideMenuBarItem"]) {
+        NSMenu* menu = [self createMenu];
 
-    // Check if Darkmode menubar is supported and enable templating of the icon in
-    // that case.
-    
-    NSImage* icon = [NSApp applicationIconImage];
-    [icon setSize:CGSizeMake(19, 19)];
+        // Check if Darkmode menubar is supported and enable templating of the icon in
+        // that case.
+        
+        NSImage* icon = [NSApp applicationIconImage];
+        [icon setSize:CGSizeMake(19, 19)];
 
-    BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
-    if (!oldBusted) {
-        // 10.10 or higher, so setTemplate: is safe
-        [icon setTemplate:YES];
+        BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
+        if (!oldBusted) {
+            // 10.10 or higher, so setTemplate: is safe
+            [icon setTemplate:YES];
+        }
+
+        _statusItem = [[[NSStatusBar systemStatusBar]
+            statusItemWithLength:NSSquareStatusItemLength] retain];
+        _statusItem.menu = menu;
+        _statusItem.button.toolTip = @"MiddleClick";
+        _statusItem.button.image = icon;
+
+        [menu release];
     }
-
-    _statusItem = [[[NSStatusBar systemStatusBar]
-        statusItemWithLength:NSSquareStatusItemLength] retain];
-    _statusItem.highlightMode = YES;
-    _statusItem.menu = menu;
-    _statusItem.button.toolTip = @"MiddleClick";
-    _statusItem.button.image = icon;
-
-    [menu release];
 }
 
 @end

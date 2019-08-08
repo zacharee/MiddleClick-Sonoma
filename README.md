@@ -27,6 +27,12 @@ After installation, I recommend to
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
 ```
 
+### Show/Hide Status Bar Icon
+
+```bash
+defaults write com.rouge41.middleClick hideMenuBarItem true # default is false
+```
+
 ---
 
 #### If you can’t even imagine why you need this:

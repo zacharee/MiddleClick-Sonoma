@@ -68,7 +68,7 @@ BOOL wasThreeDown;
     wasThreeDown = NO;
 
     needToClick =
-        [[NSUserDefaults standardUserDefaults] boolForKey:@"need_to_click"];
+        [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];
 
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     [NSApplication sharedApplication];
@@ -172,7 +172,7 @@ BOOL wasThreeDown;
 
 - (void)setMode:(BOOL)click
 {
-    [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"need_to_click"];
+    [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"needClick"];
     needToClick = click;
 }
 
