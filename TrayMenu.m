@@ -3,6 +3,7 @@
 //
 //  Created by Clem on 21.06.09.
 //  Extended by Pascal Hartmann on 13.02.2019
+//  Extended by Arthur Factor on 08.08.2019
 //
 
 #import "TrayMenu.h"
@@ -96,29 +97,35 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hideMenuBarItem"]) {
-        NSMenu* menu = [self createMenu];
+    NSMenu* menu = [self createMenu];
 
-        // Check if Darkmode menubar is supported and enable templating of the icon in
-        // that case.
-        
-        NSImage* icon = [NSApp applicationIconImage];
-        [icon setSize:CGSizeMake(19, 19)];
+    // Check if Darkmode menubar is supported and enable templating of the icon in
+    // that case.
+    
+    NSImage* icon = [NSApp applicationIconImage];
+    [icon setSize:CGSizeMake(24, 24)];
 
-        BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
-        if (!oldBusted) {
-            // 10.10 or higher, so setTemplate: is safe
-            [icon setTemplate:YES];
-        }
-
-        _statusItem = [[[NSStatusBar systemStatusBar]
-            statusItemWithLength:NSSquareStatusItemLength] retain];
-        _statusItem.menu = menu;
-        _statusItem.button.toolTip = @"MiddleClick";
-        _statusItem.button.image = icon;
-
-        [menu release];
+    BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
+    if (!oldBusted) {
+        // 10.10 or higher, so setTemplate: is safe
+        [icon setTemplate:YES];
     }
+
+    _statusItem = [[[NSStatusBar systemStatusBar]
+        statusItemWithLength:24] retain];
+    _statusItem.behavior = NSStatusItemBehaviorRemovalAllowed;
+    _statusItem.menu = menu;
+    _statusItem.button.toolTip = @"MiddleClick";
+    _statusItem.button.image = icon;
+
+    [menu release];
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender
+                    hasVisibleWindows:(BOOL)flag
+{
+    _statusItem.visible = true;
+    return 1;
 }
 
 @end
