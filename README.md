@@ -5,6 +5,9 @@
   <p>
     <b>Emulate a middleclick with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
+  <p>
+    with <b>macOS Catalina</b> <sup>10.15</sup> support!
+  </p>
   <br>
 </div>
 
