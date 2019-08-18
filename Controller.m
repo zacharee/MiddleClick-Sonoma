@@ -51,6 +51,7 @@ float middleclickX, middleclickY;
 float middleclickX2, middleclickY2;
 
 BOOL needToClick;
+int fingersNum;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
@@ -66,6 +67,8 @@ BOOL wasThreeDown;
    
     threeDown = NO;
     wasThreeDown = NO;
+  
+    fingersNum = 3;
 
     needToClick =
         [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];
@@ -159,7 +162,7 @@ BOOL wasThreeDown;
                                                       }];
 }
 
-/// Callback for system wake up. This restarts the app to initialize callbacks.
+// Callback for system wake up. This restarts the app to initialize callbacks.
 - (void)receiveWakeNote:(NSNotification*)note
 {
     [self scheduleRestart:10];
@@ -212,13 +215,13 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
     if (needToClick) {
-        if (nFingers == 3) {
+        if (nFingers == fingersNum) {
             if (!threeDown) {
                 threeDown = YES;
             }
         }
 
-        if (nFingers != 3) {
+        if (nFingers != fingersNum) {
             if (threeDown) {
                 threeDown = NO;
             }
@@ -259,13 +262,13 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
             }
         }
 
-        if (nFingers > 3) {
+        if (nFingers > fingersNum) {
             maybeMiddleClick = NO;
             middleclickX = 0.0f;
             middleclickY = 0.0f;
         }
 
-        if (nFingers == 3) {
+        if (nFingers == fingersNum) {
             Finger* f1 = &data[0];
             Finger* f2 = &data[1];
             Finger* f3 = &data[2];

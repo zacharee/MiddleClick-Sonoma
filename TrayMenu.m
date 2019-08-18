@@ -50,11 +50,6 @@
     }
 }
 
-- (void)openFinder:(id)sender
-{
-    [[NSWorkspace sharedWorkspace] launchApplication:@"Finder"];
-}
-
 - (void)actionQuit:(id)sender
 {
     [NSApp terminate:sender];
