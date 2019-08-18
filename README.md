@@ -6,21 +6,21 @@
     <b>Emulate a middleclick with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
-    with <b>macOS Catalina</b> <sup>10.15</sup> support!
+    with <b>macOS</b> Catalina<a href="//www.apple.com/macos/catalina-preview/"><sup>10.15</sup></a> support!
   </p>
   <br>
 </div>
 
-##### It's useful:
-> System-wide, you can close tabs by middleclicking on them.
+##### It's useful (more than just <kbd>⌘</kbd>+click):
+> System-wide · close tabs by middleclicking on them.
 
-> In Safari, middleclicking on a link opens it in background.
+> In Safari · middleclicking on a link opens it in background.
 
 <br>
 
 ## Install
 
-### Via [Homebrew Cask](//brew.sh) (Recommended)
+### Via :beer: [Homebrew Cask](//brew.sh) (Recommended)
 
 ```powershell
 brew cask install dafuqtor/tap/midclick
@@ -32,21 +32,21 @@ brew cask install dafuqtor/tap/midclick
   <summary>
     <a href="//github.com/DaFuqtor/MiddleClick/releases/latest/download/MiddleClick.app.zip">
       Latest Release
-    </a>&nbsp
+    </a>&nbsp·&nbsp
     <a href="//github.com/DaFuqtor/MiddleClick/releases/latest">
-      <img alt="GitHub release" src="https://img.shields.io/github/release/dafuqtor/middleclick?label=%20">
+      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/dafuqtor/middleclick?label=%20&color=gray">
     </a>
   </summary>
-  
+
   > Additionally, you may also view <a href="//github.com/DaFuqtor/MiddleClick/releases">Earlier Releases</a>
-  
+
 </details>
 
 <br>
 
 ### Add Login Item
 
-> Make it open automatically when you log in, it's handy to do using command line
+> Make it open automatically when you log in (it's handy to do using command line)
 
 ```powershell
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
@@ -54,7 +54,7 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 
 ### Hide Status Bar Item
 
-1. Holding <kbd>⌘</kbd>, drag it away from the status bar until you see a cross icon
+1. Holding <kbd>⌘</kbd>, drag it away from the status bar until you see a :heavy_multiplication_x: (cross icon)
 2. Let it go
 
 > To recover the item, just open MiddleClick when it's already running
@@ -77,4 +77,4 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 2. Remove it from the privacy settings
 3. Enable the new version in privacy settings when prompted
 
-> It is important to follow the steps in order, otherwise the Mouse may not be clickable and you have to `killall MiddleClick` via terminal or even force reset the Mac.
+> The app should be closed when you change the privacy settings, otherwise the Mouse may not be clickable and you may have to `killall MiddleClick` via terminal or even force restart the Mac.
