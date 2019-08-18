@@ -20,19 +20,19 @@
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MiddleClick/main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		508EF7C3225FAC4C00353781 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		508EF7C3225FAC4C00353781 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MiddleClick/Images.xcassets; sourceTree = "<group>"; };
 		7569F71D1007F64500D9CE54 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		75A6B65E0FEE3BE90071FAC0 /* TrayMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrayMenu.h; sourceTree = "<group>"; };
-		75A6B65F0FEE3BE90071FAC0 /* TrayMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrayMenu.m; sourceTree = "<group>"; };
+		75A6B65E0FEE3BE90071FAC0 /* TrayMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrayMenu.h; path = MiddleClick/TrayMenu.h; sourceTree = "<group>"; };
+		75A6B65F0FEE3BE90071FAC0 /* TrayMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrayMenu.m; path = MiddleClick/TrayMenu.m; sourceTree = "<group>"; };
 		75A6B66B0FEE87AB0071FAC0 /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = /System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<absolute>"; };
 		75A6B69C0FEE90530071FAC0 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
-		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MiddleClick/Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MiddleClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiddleClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FAD94F9210A88A7800A520EC /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
-		FAD94F9310A88A7800A520EC /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
+		FAD94F9210A88A7800A520EC /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Controller.h; path = MiddleClick/Controller.h; sourceTree = "<group>"; };
+		FAD94F9310A88A7800A520EC /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Controller.m; path = MiddleClick/Controller.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,10 +163,7 @@
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
-				ja,
 				Base,
-				fr,
-				de,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* test */;
 			projectDirPath = "";
@@ -218,7 +215,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/MiddleClick/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rouge41.middleClick;
 				PRODUCT_NAME = MiddleClick;
@@ -240,7 +237,7 @@
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/MiddleClick/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rouge41.middleClick;
 				PRODUCT_NAME = MiddleClick;
