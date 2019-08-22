@@ -1,11 +1,3 @@
-//
-//  Controller.m
-//  MiddleClick
-//
-//  Created by Alex Galonsky on 11/9/09.
-//  Extended by Pascal Hartmann on 13.02.2019
-//
-
 #import "Controller.h"
 #include "TrayMenu.h"
 #import <Cocoa/Cocoa.h>
@@ -17,23 +9,23 @@
 #pragma mark Multitouch API
 
 typedef struct {
-    float x, y;
+  float x, y;
 } mtPoint;
 typedef struct {
-    mtPoint pos, vel;
+  mtPoint pos, vel;
 } mtReadout;
 
 typedef struct {
-    int frame;
-    double timestamp;
-    int identifier, state, foo3, foo4;
-    mtReadout normalized;
-    float size;
-    int zero1;
-    float angle, majorAxis, minorAxis; // ellipsoid
-    mtReadout mm;
-    int zero2[2];
-    float unk2;
+  int frame;
+  double timestamp;
+  int identifier, state, foo3, foo4;
+  mtReadout normalized;
+  float size;
+  int zero1;
+  float angle, majorAxis, minorAxis; // ellipsoid
+  mtReadout mm;
+  int zero2[2];
+  float unk2;
 } Finger;
 
 typedef void* MTDeviceRef;
@@ -51,7 +43,7 @@ float middleclickX, middleclickY;
 float middleclickX2, middleclickY2;
 
 BOOL needToClick;
-int fingersNum;
+int fingersQua;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
@@ -59,124 +51,125 @@ BOOL wasThreeDown;
 #pragma mark Implementation
 
 @implementation Controller {
-    NSTimer* _restartTimer;
+  NSTimer* _restartTimer;
 }
 
 - (void)start
 {
-   
-    threeDown = NO;
-    wasThreeDown = NO;
   
-    fingersNum = 3;
-
-    needToClick =
-        [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];
-
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    [NSApplication sharedApplication];
-
-    // Get list of all multi touch devices
-    NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
-
-    // Iterate and register callbacks for multitouch devices.
-    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
-    {
-        MTRegisterContactFrameCallback((MTDeviceRef)[deviceList objectAtIndex:i],
-            touchCallback); // assign callback for device
-        MTDeviceStart((MTDeviceRef)[deviceList objectAtIndex:i],
-            0); // start sending events
+  threeDown = NO;
+  wasThreeDown = NO;
+  
+  fingersQua = 3;
+  
+  needToClick =
+  [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];
+  
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  [NSApplication sharedApplication];
+  
+  // Get list of all multi touch devices
+  NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
+  
+  // Iterate and register callbacks for multitouch devices.
+  for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+  {
+    MTRegisterContactFrameCallback((MTDeviceRef)[deviceList objectAtIndex:i],
+                                   touchCallback); // assign callback for device
+    MTDeviceStart((MTDeviceRef)[deviceList objectAtIndex:i],
+                  0); // start sending events
+  }
+  
+  // register a callback to know when osx come back from sleep
+  [[[NSWorkspace sharedWorkspace] notificationCenter]
+   addObserver:self
+   selector:@selector(receiveWakeNote:)
+   name:NSWorkspaceDidWakeNotification
+   object:NULL];
+  
+  // Register IOService notifications for added devices.
+  IONotificationPortRef port = IONotificationPortCreate(kIOMasterPortDefault);
+  CFRunLoopAddSource(CFRunLoopGetMain(),
+                     IONotificationPortGetRunLoopSource(port),
+                     kCFRunLoopDefaultMode);
+  io_iterator_t handle;
+  kern_return_t err = IOServiceAddMatchingNotification(
+                                                       port, kIOFirstMatchNotification,
+                                                       IOServiceMatching("AppleMultitouchDevice"), multitouchDeviceAddedCallback,
+                                                       self, &handle);
+  if (err) {
+    NSLog(@"Failed to register notification for touchpad attach: %xd, will not "
+          @"handle newly "
+          @"attached devices",
+          err);
+    IONotificationPortDestroy(port);
+  } else {
+    /// Iterate through all the existing entries to arm the notification.
+    io_object_t item;
+    while ((item = IOIteratorNext(handle))) {
+      CFRelease(item);
     }
-    
-    // register a callback to know when osx come back from sleep
-    [[[NSWorkspace sharedWorkspace] notificationCenter]
-        addObserver:self
-           selector:@selector(receiveWakeNote:)
-               name:NSWorkspaceDidWakeNotification
-             object:NULL];
-    
-    // Register IOService notifications for added devices.
-    IONotificationPortRef port = IONotificationPortCreate(kIOMasterPortDefault);
-    CFRunLoopAddSource(CFRunLoopGetMain(),
-        IONotificationPortGetRunLoopSource(port),
-        kCFRunLoopDefaultMode);
-    io_iterator_t handle;
-    kern_return_t err = IOServiceAddMatchingNotification(
-        port, kIOFirstMatchNotification,
-        IOServiceMatching("AppleMultitouchDevice"), multitouchDeviceAddedCallback,
-        self, &handle);
-    if (err) {
-        NSLog(@"Failed to register notification for touchpad attach: %xd, will not "
-              @"handle newly "
-              @"attached devices",
-            err);
-        IONotificationPortDestroy(port);
-    } else {
-        /// Iterate through all the existing entries to arm the notification.
-        io_object_t item;
-        while ((item = IOIteratorNext(handle))) {
-            CFRelease(item);
-        }
-    }
-    
-    // when displays are reconfigured restart of the app is needed, so add a calback to the
-    // reconifguration of Core Graphics
-    CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, self);
-    
-    // we only want to see left mouse down and left mouse up, because we only want
-    // to change that one
-    CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
-
-    // create eventTap which listens for core grpahic events with the filter
-    // sepcified above (so left mouse down and up again)
-    CFMachPortRef eventTap = CGEventTapCreate(
-        kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-        eventMask, mouseCallback, NULL);
-
-    if (!eventTap) {
-        NSLog(@"Couldn't create event tap!");
-        exit(1);
-    }
-
+  }
+  
+  // when displays are reconfigured restart of the app is needed, so add a calback to the
+  // reconifguration of Core Graphics
+  CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, self);
+  
+  // we only want to see left mouse down and left mouse up, because we only want
+  // to change that one
+  CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
+  
+  // create eventTap which listens for core grpahic events with the filter
+  // sepcified above (so left mouse down and up again)
+  CFMachPortRef eventTap = CGEventTapCreate(
+                                            kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
+                                            eventMask, mouseCallback, NULL);
+  
+  if (eventTap) {
     // Add to the current run loop.
     CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
-        kCFRunLoopCommonModes);
-
+                       kCFRunLoopCommonModes);
+    
     // Enable the event tap.
     CGEventTapEnable(eventTap, true);
-
+    
     // release pool before exit
     [pool release];
+  } else {
+    NSLog(@"Couldn't create event tap! Check accessibility permissions.");
+    [[NSUserDefaults standardUserDefaults] setBool:1 forKey:@"NSStatusItem Visible Item-0"];
+    [self scheduleRestart:5];
+  }
 }
 
 /// Schedule app to be restarted, if a restart is pending, delay it.
 - (void)scheduleRestart:(NSTimeInterval)delay
 {
-    [_restartTimer invalidate]; // Invalidate any existing timer.
-
-    _restartTimer = [NSTimer scheduledTimerWithTimeInterval:delay
-                                                    repeats:NO
-                                                      block:^(NSTimer* timer) {
-                                                          restartApp();
-                                                      }];
+  [_restartTimer invalidate]; // Invalidate any existing timer.
+  
+  _restartTimer = [NSTimer scheduledTimerWithTimeInterval:delay
+                                                  repeats:NO
+                                                    block:^(NSTimer* timer) {
+                                                      restartApp();
+                                                    }];
 }
 
 // Callback for system wake up. This restarts the app to initialize callbacks.
 - (void)receiveWakeNote:(NSNotification*)note
 {
-    [self scheduleRestart:10];
+  [self scheduleRestart:10];
 }
 
 - (BOOL)getClickMode
 {
-    return needToClick;
+  return needToClick;
 }
 
 - (void)setMode:(BOOL)click
 {
-    [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"needClick"];
-    needToClick = click;
+  [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"needClick"];
+  needToClick = click;
 }
 
 // listening to mouse clicks to replace them with middle clicks if there are 3
@@ -186,147 +179,147 @@ BOOL wasThreeDown;
 // other click up and setting three button number to middle click when 3 fingers
 // were down when the last click went down.
 CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
-    CGEventRef event, void* refcon)
+                         CGEventRef event, void* refcon)
 {
-    if (needToClick) {
-        if (threeDown && type == kCGEventLeftMouseDown) {
-            wasThreeDown = YES;
-            CGEventSetType(event, kCGEventOtherMouseDown);
-            CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber,
-                kCGMouseButtonCenter);
-            threeDown = NO;
-        }
-
-        if (wasThreeDown && type == kCGEventLeftMouseUp) {
-            wasThreeDown = NO;
-            CGEventSetType(event, kCGEventOtherMouseUp);
-            CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber,
-                kCGMouseButtonCenter);
-        }
+  if (needToClick) {
+    if (threeDown && type == kCGEventLeftMouseDown) {
+      wasThreeDown = YES;
+      CGEventSetType(event, kCGEventOtherMouseDown);
+      CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber,
+                                  kCGMouseButtonCenter);
+      threeDown = NO;
     }
-    return event;
+    
+    if (wasThreeDown && type == kCGEventLeftMouseUp) {
+      wasThreeDown = NO;
+      CGEventSetType(event, kCGEventOtherMouseUp);
+      CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber,
+                                  kCGMouseButtonCenter);
+    }
+  }
+  return event;
 }
 
 // mulittouch callback, see what is touched. If 3 are on the mouse set
 // threedowns, else unset threedowns.
 int touchCallback(int device, Finger* data, int nFingers, double timestamp,
-    int frame)
+                  int frame)
 {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-
-    if (needToClick) {
-        if (nFingers == fingersNum) {
-            if (!threeDown) {
-                threeDown = YES;
-            }
-        }
-
-        if (nFingers != fingersNum) {
-            if (threeDown) {
-                threeDown = NO;
-            }
-        }
-    } else {
-        if (nFingers == 0) {
-            touchStartTime = NULL;
-            if (middleclickX + middleclickY) {
-                float delta = ABS(middleclickX - middleclickX2) + ABS(middleclickY - middleclickY2);
-                if (delta < 0.4f) {
-                    // Emulate a middle click
-
-                    // get the current pointer location
-                    CGEventRef ourEvent = CGEventCreate(NULL);
-                    CGPoint ourLoc = CGEventGetLocation(ourEvent);
-
-                    CGEventPost(kCGHIDEventTap,
-                        CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown,
-                            ourLoc, kCGMouseButtonCenter));
-                    CGEventPost(kCGHIDEventTap,
-                        CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp,
-                            ourLoc, kCGMouseButtonCenter));
-                }
-            }
-        } else if (nFingers > 0 && touchStartTime == NULL) {
-            NSDate* now = [[NSDate alloc] init];
-            touchStartTime = [now retain];
-            [now release];
-
-            maybeMiddleClick = YES;
-            middleclickX = 0.0f;
-            middleclickY = 0.0f;
-        } else {
-            if (maybeMiddleClick == YES) {
-                NSTimeInterval elapsedTime = -[touchStartTime timeIntervalSinceNow];
-                if (elapsedTime > 0.5f)
-                    maybeMiddleClick = NO;
-            }
-        }
-
-        if (nFingers > fingersNum) {
-            maybeMiddleClick = NO;
-            middleclickX = 0.0f;
-            middleclickY = 0.0f;
-        }
-
-        if (nFingers == fingersNum) {
-            Finger* f1 = &data[0];
-            Finger* f2 = &data[1];
-            Finger* f3 = &data[2];
-
-            if (maybeMiddleClick == YES) {
-                middleclickX = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
-                middleclickY = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
-                middleclickX2 = middleclickX;
-                middleclickY2 = middleclickY;
-                maybeMiddleClick = NO;
-            } else {
-                middleclickX2 = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
-                middleclickY2 = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
-            }
-        }
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  
+  if (needToClick) {
+    if (nFingers == fingersQua) {
+      if (!threeDown) {
+        threeDown = YES;
+      }
     }
-
-    [pool release];
-    return 0;
+    
+    if (nFingers != fingersQua) {
+      if (threeDown) {
+        threeDown = NO;
+      }
+    }
+  } else {
+    if (nFingers == 0) {
+      touchStartTime = NULL;
+      if (middleclickX + middleclickY) {
+        float delta = ABS(middleclickX - middleclickX2) + ABS(middleclickY - middleclickY2);
+        if (delta < 0.4f) {
+          // Emulate a middle click
+          
+          // get the current pointer location
+          CGEventRef ourEvent = CGEventCreate(NULL);
+          CGPoint ourLoc = CGEventGetLocation(ourEvent);
+          
+          CGEventPost(kCGHIDEventTap,
+                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown,
+                                              ourLoc, kCGMouseButtonCenter));
+          CGEventPost(kCGHIDEventTap,
+                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp,
+                                              ourLoc, kCGMouseButtonCenter));
+        }
+      }
+    } else if (nFingers > 0 && touchStartTime == NULL) {
+      NSDate* now = [[NSDate alloc] init];
+      touchStartTime = [now retain];
+      [now release];
+      
+      maybeMiddleClick = YES;
+      middleclickX = 0.0f;
+      middleclickY = 0.0f;
+    } else {
+      if (maybeMiddleClick == YES) {
+        NSTimeInterval elapsedTime = -[touchStartTime timeIntervalSinceNow];
+        if (elapsedTime > 0.5f)
+          maybeMiddleClick = NO;
+      }
+    }
+    
+    if (nFingers > fingersQua) {
+      maybeMiddleClick = NO;
+      middleclickX = 0.0f;
+      middleclickY = 0.0f;
+    }
+    
+    if (nFingers == fingersQua) {
+      Finger* f1 = &data[0];
+      Finger* f2 = &data[1];
+      Finger* f3 = &data[2];
+      
+      if (maybeMiddleClick == YES) {
+        middleclickX = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
+        middleclickY = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
+        middleclickX2 = middleclickX;
+        middleclickY2 = middleclickY;
+        maybeMiddleClick = NO;
+      } else {
+        middleclickX2 = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
+        middleclickY2 = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
+      }
+    }
+  }
+  
+  [pool release];
+  return 0;
 }
 
 /// Relaunch the app when devices are connected/invalidated.
 static void restartApp()
 {
-    NSTask *task = [[[NSTask alloc] init] autorelease];
-    NSMutableArray *args = [NSMutableArray array];
-    [args addObject:@"-c"];
-    [args addObject:[NSString stringWithFormat:@"sleep %f; open \"%@\"", 1.0, [[NSBundle mainBundle] bundlePath]]];
-    [task setLaunchPath:@"/bin/sh"];
-    [task setArguments:args];
-    [task launch];
-    
-    [NSApp terminate:NULL];
+  NSTask *task = [[[NSTask alloc] init] autorelease];
+  NSMutableArray *args = [NSMutableArray array];
+  [args addObject:@"-c"];
+  [args addObject:[NSString stringWithFormat:@"sleep %f; open \"%@\"", 1.0, [[NSBundle mainBundle] bundlePath]]];
+  [task setLaunchPath:@"/bin/sh"];
+  [task setArguments:args];
+  [task launch];
+  
+  [NSApp terminate:NULL];
 }
 
 /// Callback when a multitouch device is added.
 void multitouchDeviceAddedCallback(void* _controller,
-    io_iterator_t iterator)
+                                   io_iterator_t iterator)
 {
-    /// Loop through all the returned items.
-    io_object_t item;
-    while ((item = IOIteratorNext(iterator))) {
-        CFRelease(item);
-    }
-
-    NSLog(@"Multitouch device added, restarting...");
-    Controller* controller = (Controller*)_controller;
-    [controller scheduleRestart:2];
+  /// Loop through all the returned items.
+  io_object_t item;
+  while ((item = IOIteratorNext(iterator))) {
+    CFRelease(item);
+  }
+  
+  NSLog(@"Multitouch device added, restarting...");
+  Controller* controller = (Controller*)_controller;
+  [controller scheduleRestart:2];
 }
 
 void displayReconfigurationCallBack(CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags, void* _controller)
 {
-    if(flags & kCGDisplaySetModeFlag || flags & kCGDisplayAddFlag || flags & kCGDisplayRemoveFlag || flags & kCGDisplayDisabledFlag)
-    {
-        NSLog(@"Display reconfigured, restarting...");
-        Controller* controller = (Controller*)_controller;
-        [controller scheduleRestart:2];
-    }
+  if(flags & kCGDisplaySetModeFlag || flags & kCGDisplayAddFlag || flags & kCGDisplayRemoveFlag || flags & kCGDisplayDisabledFlag)
+  {
+    NSLog(@"Display reconfigured, restarting...");
+    Controller* controller = (Controller*)_controller;
+    [controller scheduleRestart:2];
+  }
 }
 
 

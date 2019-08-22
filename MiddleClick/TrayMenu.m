@@ -1,11 +1,3 @@
-//
-//  TrayMenu.m
-//
-//  Created by Clem on 21.06.09.
-//  Extended by Pascal Hartmann on 13.02.2019
-//  Extended by Arthur Factor on 08.08.2019
-//
-
 #import "TrayMenu.h"
 #import "Controller.h"
 #import <Cocoa/Cocoa.h>
@@ -14,113 +6,115 @@
 
 - (id)initWithController:(Controller*)ctrl
 {
-    [super init];
-    myController = ctrl;
-    [self setChecks];
-    return self;
+  [super init];
+  myController = ctrl;
+  [self setChecks];
+  return self;
 }
 
 - (void)openWebsite:(id)sender
 {
-    NSURL* url = [NSURL
-        URLWithString:@"https://github.com/DaFuqtor/MiddleClick"];
-    [[NSWorkspace sharedWorkspace] openURL:url];
+  NSURL* url = [NSURL
+                URLWithString:@"https://github.com/DaFuqtor/MiddleClick"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
 - (void)setClick:(id)sender
 {
-    [myController setMode:YES];
-    [self setChecks];
+  [myController setMode:YES];
+  [self setChecks];
 }
 
 - (void)setTap:(id)sender
 {
-    [myController setMode:NO];
-    [self setChecks];
+  [myController setMode:NO];
+  [self setChecks];
 }
 
 - (void)setChecks
 {
-    if ([myController getClickMode]) {
-        [clickItem setState:NSControlStateValueOn];
-        [tapItem setState:NSControlStateValueOff];
-    } else {
-        [clickItem setState:NSControlStateValueOff];
-        [tapItem setState:NSControlStateValueOn];
-    }
+  if ([myController getClickMode]) {
+    [clickItem setState:NSControlStateValueOn];
+    [tapItem setState:NSControlStateValueOff];
+  } else {
+    [clickItem setState:NSControlStateValueOff];
+    [tapItem setState:NSControlStateValueOn];
+  }
 }
 
 - (void)actionQuit:(id)sender
 {
-    [NSApp terminate:sender];
+  [NSApp terminate:sender];
 }
 
 - (NSMenu*)createMenu
 {
-    NSMenu* menu = [NSMenu new];
-    NSMenuItem* menuItem;
-
-    // Add About
-    menuItem = [menu addItemWithTitle:@"About MiddleClick"
-                               action:@selector(openWebsite:)
-                        keyEquivalent:@""];
-    [menuItem setTarget:self];
-    [menu addItem:[NSMenuItem separatorItem]];
-    clickItem = [menu addItemWithTitle:@"3 Finger Click"
-                                action:@selector(setClick:)
-                         keyEquivalent:@""];
-    [clickItem setTarget:self];
-
-    tapItem = [menu addItemWithTitle:@"3 Finger Tap"
-                              action:@selector(setTap:)
+  NSMenu* menu = [NSMenu new];
+  NSMenuItem* menuItem;
+  
+  // Add About
+  menuItem = [menu addItemWithTitle:@"About MiddleClick"
+                             action:@selector(openWebsite:)
+                      keyEquivalent:@""];
+  [menuItem setTarget:self];
+  
+  [menu addItem:[NSMenuItem separatorItem]];
+  
+  clickItem = [menu addItemWithTitle:@"3 Finger Click"
+                              action:@selector(setClick:)
                        keyEquivalent:@""];
-    [tapItem setTarget:self];
-    [self setChecks];
-
-    // Add Separator
-    [menu addItem:[NSMenuItem separatorItem]];
-
-    // Add Quit Action
-    menuItem = [menu addItemWithTitle:@"Quit"
-                               action:@selector(actionQuit:)
-                        keyEquivalent:@"q"];
-
-    [menuItem setTarget:self];
-
-    return menu;
+  [clickItem setTarget:self];
+  
+  tapItem = [menu addItemWithTitle:@"3 Finger Tap"
+                            action:@selector(setTap:)
+                     keyEquivalent:@""];
+  [tapItem setTarget:self];
+  
+  [self setChecks];
+  
+  // Add Separator
+  [menu addItem:[NSMenuItem separatorItem]];
+  
+  // Add Quit Action
+  menuItem = [menu addItemWithTitle:@"Quit"
+                             action:@selector(actionQuit:)
+                      keyEquivalent:@"q"];
+  [menuItem setTarget:self];
+  
+  return menu;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
-    NSMenu* menu = [self createMenu];
-
-    // Check if Darkmode menubar is supported and enable templating of the icon in
-    // that case.
-    
-    NSImage* icon = [NSApp applicationIconImage];
-    [icon setSize:CGSizeMake(24, 24)];
-
-    BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
-    if (!oldBusted) {
-        // 10.10 or higher, so setTemplate: is safe
-        [icon setTemplate:YES];
-    }
-
-    _statusItem = [[[NSStatusBar systemStatusBar]
-        statusItemWithLength:24] retain];
-    _statusItem.behavior = NSStatusItemBehaviorRemovalAllowed;
-    _statusItem.menu = menu;
-    _statusItem.button.toolTip = @"MiddleClick";
-    _statusItem.button.image = icon;
-
-    [menu release];
+  NSMenu* menu = [self createMenu];
+  
+  NSImage* icon = [NSApp applicationIconImage];
+  [icon setSize:CGSizeMake(24, 24)];
+  
+  // Check if Darkmode menubar is supported and enable templating of the icon in
+  // that case.
+  
+  BOOL oldBusted = (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9);
+  if (!oldBusted) {
+    // 10.10 or higher, so setTemplate: is safe
+    [icon setTemplate:YES];
+  }
+  
+  _statusItem = [[[NSStatusBar systemStatusBar]
+                  statusItemWithLength:24] retain];
+  _statusItem.behavior = NSStatusItemBehaviorRemovalAllowed;
+  _statusItem.menu = menu;
+  _statusItem.button.toolTip = @"MiddleClick";
+  _statusItem.button.image = icon;
+  
+  [menu release];
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender
                     hasVisibleWindows:(BOOL)flag
 {
-    _statusItem.visible = true;
-    return 1;
+  _statusItem.visible = true;
+  return 1;
 }
 
 @end
