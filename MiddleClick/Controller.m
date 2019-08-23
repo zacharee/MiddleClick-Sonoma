@@ -60,7 +60,7 @@ BOOL wasThreeDown;
   threeDown = NO;
   wasThreeDown = NO;
   
-  fingersQua = 3;
+  fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
   needToClick =
   [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];

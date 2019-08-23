@@ -52,6 +52,10 @@
   NSMenu* menu = [NSMenu new];
   NSMenuItem* menuItem;
   
+  
+  
+  int fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
+  
   // Add About
   menuItem = [menu addItemWithTitle:@"About MiddleClick"
                              action:@selector(openWebsite:)
@@ -60,12 +64,12 @@
   
   [menu addItem:[NSMenuItem separatorItem]];
   
-  clickItem = [menu addItemWithTitle:@"3 Finger Click"
+  clickItem = [menu addItemWithTitle:[NSString stringWithFormat: @"%d Finger Click", fingersQua]
                               action:@selector(setClick:)
                        keyEquivalent:@""];
   [clickItem setTarget:self];
   
-  tapItem = [menu addItemWithTitle:@"3 Finger Tap"
+  tapItem = [menu addItemWithTitle:[NSString stringWithFormat: @"%d Finger Tap", fingersQua]
                             action:@selector(setTap:)
                      keyEquivalent:@""];
   [tapItem setTarget:self];
