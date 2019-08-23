@@ -44,6 +44,21 @@ brew cask install dafuqtor/tap/midclick
 
 <br>
 
+### Hide Status Bar Item
+
+1. Holding `⌘`, drag it away from the status bar until you see a :heavy_multiplication_x: (cross icon)
+2. Let it go
+
+> To recover the item, just open MiddleClick when it's already running
+
+### Number of Fingers
+- Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
+
+```sh
+defaults write com.rouge41.middleClick fingers <int>
+```
+> Initially, it's 3 fingers to middleclick.
+
 ### Add Login Item
 
 > Make it open automatically when you log in (it's handy to do using command line)
@@ -52,22 +67,15 @@ brew cask install dafuqtor/tap/midclick
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
 ```
 
-### Hide Status Bar Item
-
-1. Holding <kbd>⌘</kbd>, drag it away from the status bar until you see a :heavy_multiplication_x: (cross icon)
-2. Let it go
-
-> To recover the item, just open MiddleClick when it's already running
-
 ---
 
 <details>
   <summary>This fork differs from the <a href="//github.com/cl3m/MiddleClick">base fork</a> in some ways</summary>
 
-- Configuration: Click or Tap
+- Configurations: Number of Fingers, Click or Tap
   - preferred setting is saved for every user
 - Removed old 32-bit/PowerPc `relaunch` binary due to it's incompatibility with macOS 10.15 Catalina and greater. Replaced with inline restarting of the app
-- The App will not only restart on waking the Mac, but when a new touch device is added (so it immediately gains middleclicking ability) and when a display is added/reconfigured (which seems to be necessary)
+- The App will not only restart on waking the Mac, but when a new touch device is added (so it immediately gains middleclicking ability) and when a display is added/reconfigured (for proper click positioning)
 
 </details>
 
