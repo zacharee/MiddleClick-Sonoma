@@ -43,7 +43,7 @@ float middleclickX, middleclickY;
 float middleclickX2, middleclickY2;
 
 BOOL needToClick;
-int fingersQua;
+long fingersQua;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
@@ -56,7 +56,6 @@ BOOL wasThreeDown;
 
 - (void)start
 {
-  
   threeDown = NO;
   wasThreeDown = NO;
   
@@ -206,6 +205,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
                   int frame)
 {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
   if (needToClick) {
     if (nFingers == fingersQua) {
