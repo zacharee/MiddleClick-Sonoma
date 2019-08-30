@@ -11,10 +11,22 @@
   <br>
 </div>
 
-##### It's useful (more than just <kbd>⌘</kbd>+click):
-> System-wide · close tabs by middleclicking on them.
+<h2 align="right">:mag: Usage</h2>
 
-> In Safari · middleclicking on a link opens it in background.
+<blockquote align="right">
+  
+  It's more than just `⌘`+click
+</blockquote>
+
+<p align="right">
+  
+  `System-wide` · close tabs by middleclicking on them
+</p>
+
+<p align="right">
+  
+  `In Safari` · middleclicking on a link opens it in background
+</p>
 
 <br>
 
@@ -61,11 +73,17 @@ defaults write com.rouge41.middleClick fingers <int>
 
 ### Add Login Item
 
-> Make it open automatically when you log in (it's handy to do using command line)
+> Make it open automatically when you log in
 
+<details>
+  
+<summary>Just add MiddleClick to your "Login Items". <p align="right">(it's handy to be done using command line)</p></summary>
+  
 ```powershell
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
 ```
+
+</details>
 
 ---
 
@@ -76,7 +94,6 @@ osascript -e 'tell application "System Events" to make login item at end with pr
   - preferred setting is saved for every user
 - Removed old 32-bit/PowerPc `relaunch` binary due to it's incompatibility with macOS 10.15 Catalina and greater. Replaced with inline restarting of the app
 - The App will not only restart on waking the Mac, but when a new touch device is added (so it immediately gains middleclicking ability) and when a display is added/reconfigured (for proper click positioning)
-
 </details>
 
 #### Attention! Make sure to:
@@ -86,3 +103,16 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 3. Enable the new version in privacy settings when prompted
 
 > The app should be closed when you change the privacy settings, otherwise the Mouse may not be clickable and you may have to `killall MiddleClick` via terminal or even force restart the Mac.
+
+<details>
+  <summary><b>Credits</b></summary>
+  <blockquote>
+  <br>
+    
+  This project was made by [Clément Beffa](//clement.beffa.org/),
+
+  Extended by [LoPablo](//github.com/LoPablo)
+
+  and [DaFuqtor](//github.com/DaFuqtor) (it's me)
+  </blockquote>
+</details>
