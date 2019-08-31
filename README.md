@@ -3,7 +3,7 @@
     MiddleClick <img align="center" height="80" src="MiddleClick/Images.xcassets/AppIcon.appiconset/mouse128x128.png">
   </h1>
   <p>
-    <b>Emulate a middleclick with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
+    <b>Emulate a scroll wheel click with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
     with <b>macOS</b> Catalina<a href="//www.apple.com/macos/catalina-preview/"><sup>10.15</sup></a> support!
@@ -42,7 +42,7 @@ brew cask install dafuqtor/tap/midclick
 
 <details>
   <summary>
-    <a href="//github.com/DaFuqtor/MiddleClick/releases/latest/download/MiddleClick.app.zip">
+    <a href="//github.com/DaFuqtor/MiddleClick/releases/latest/download/MiddleClick.zip">
       Latest Release
     </a>&nbsp·&nbsp
     <a href="//github.com/DaFuqtor/MiddleClick/releases/latest">
