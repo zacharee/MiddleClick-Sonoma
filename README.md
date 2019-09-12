@@ -11,6 +11,8 @@
   <br>
 </div>
 
+<img src="demo.png" width="55%">
+
 <h2 align="right">:mag: Usage</h2>
 
 <blockquote align="right">
