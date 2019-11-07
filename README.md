@@ -37,7 +37,7 @@
 ### Via :beer: [Homebrew Cask](//brew.sh) (Recommended)
 
 ```powershell
-brew cask install dafuqtor/tap/midclick
+brew cask install middleclick
 ```
 
 ### Direct Download
