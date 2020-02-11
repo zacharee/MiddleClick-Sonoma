@@ -92,7 +92,7 @@
 {
   NSMenu* menu = [self createMenu];
   
-  NSImage* icon = [NSApp applicationIconImage];
+  NSImage* icon = [NSImage imageNamed:(@"StatusIcon")];
   [icon setSize:CGSizeMake(24, 24)];
   
   // Check if Darkmode menubar is supported and enable templating of the icon in

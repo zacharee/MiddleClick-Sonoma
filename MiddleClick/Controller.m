@@ -293,6 +293,7 @@ static void restartApp()
   [task setLaunchPath:@"/bin/sh"];
   [task setArguments:args];
   [task launch];
+  NSLog(@"Restarting app...");
   
   [NSApp terminate:NULL];
 }
