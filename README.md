@@ -32,6 +32,10 @@
 
 <br>
 
+<a href="https://github.com/DaFuqtor/MiddleClick-Catalina/releases">
+<img align="right" src="https://img.shields.io/github/downloads/dafuqtor/middleclick-catalina/total" title="GitHub All Releases">
+</a>
+
 ## Install
 
 ### Via :beer: [Homebrew Cask](//brew.sh) (Recommended)
