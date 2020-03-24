@@ -9,6 +9,11 @@
     with <b>macOS</b> Catalina<a href="//www.apple.com/macos/catalina-preview/"><sup>10.15</sup></a> support!
   </p>
   <br>
+  <p><b>!_ Discontinued _!</b></p>
+  <p>
+    I recommend you all, guys, to use <a href="//multitouch.app">Multitouch.app</a> instead
+  </p>
+  <br>
 </div>
 
 <img src="demo.png" width="55%">
