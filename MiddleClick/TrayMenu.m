@@ -15,7 +15,7 @@
 - (void)openWebsite:(id)sender
 {
   NSURL* url = [NSURL
-                URLWithString:@"https://github.com/DaFuqtor/MiddleClick"];
+                URLWithString:@"https://github.com/artginzburg/MiddleClick-BigSur"];
   [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
@@ -54,10 +54,10 @@
   
   
   
-  int fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
+  int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
   // Add About
-  menuItem = [menu addItemWithTitle:@"About MiddleClick"
+  menuItem = [menu addItemWithTitle:@"About MiddleClick..."
                              action:@selector(openWebsite:)
                       keyEquivalent:@""];
   [menuItem setTarget:self];

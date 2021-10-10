@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
   
   // add Menu Bar item
   TrayMenu* menu = [[TrayMenu alloc] initWithController:con];
-  [app setDelegate:menu];
+  [app setDelegate:(id<NSApplicationDelegate>)menu];
   
   [app run];
   

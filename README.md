@@ -1,3 +1,7 @@
+<a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">
+  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-bigsur/total" title="GitHub All Releases">
+</a>
+
 <div align="center">
   <h1>
     MiddleClick <img align="center" height="80" src="MiddleClick/Images.xcassets/AppIcon.appiconset/mouse128x128.png">
@@ -6,12 +10,7 @@
     <b>Emulate a scroll wheel click with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
-    with <b>macOS</b> Catalina<a href="//www.apple.com/macos/catalina-preview/"><sup>10.15</sup></a> support!
-  </p>
-  <br>
-  <p><b>!_ Discontinued _!</b></p>
-  <p>
-    I recommend you all, guys, to use <a href="//multitouch.app">Multitouch.app</a> instead
+    with <b>macOS</b> Big Sur<a href="https://www.apple.com/macos/big-sur/"><sup>11.5</sup></a> support!
   </p>
   <br>
 </div>
@@ -37,31 +36,27 @@
 
 <br>
 
-<a href="https://github.com/DaFuqtor/MiddleClick-Catalina/releases">
-<img align="right" src="https://img.shields.io/github/downloads/dafuqtor/middleclick-catalina/total" title="GitHub All Releases">
-</a>
-
 ## Install
 
 ### Via :beer: [Homebrew Cask](//brew.sh) (Recommended)
 
-```powershell
-brew cask install middleclick
+```ps1
+brew install --cask middleclick
 ```
 
 ### Direct Download
 
 <details>
   <summary>
-    <a href="//github.com/DaFuqtor/MiddleClick/releases/latest/download/MiddleClick.zip">
+    <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases/latest/download/MiddleClick.zip">
       Latest Release
     </a>&nbsp·&nbsp
-    <a href="//github.com/DaFuqtor/MiddleClick/releases/latest">
-      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/dafuqtor/middleclick?label=%20&color=gray">
+    <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases/latest">
+      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-BigSur?label=%20&color=gray">
     </a>
   </summary>
 
-  > Additionally, you may also view <a href="//github.com/DaFuqtor/MiddleClick/releases">Earlier Releases</a>
+  > Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">Earlier Releases</a>
 
 </details>
 
@@ -77,8 +72,8 @@ brew cask install middleclick
 ### Number of Fingers
 - Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
 
-```sh
-defaults write com.rouge41.middleClick fingers <int>
+```ps1
+defaults write com.artginzburg.MiddleClick fingers <int>
 ```
 > Initially, it's 3 fingers to middleclick.
 
@@ -90,7 +85,7 @@ defaults write com.rouge41.middleClick fingers <int>
   
 <summary>Just add MiddleClick to your "Login Items". <p align="right">(it's handy to be done using command line)</p></summary>
   
-```powershell
+```ps1
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
 ```
 
@@ -124,6 +119,6 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 
   Extended by [LoPablo](//github.com/LoPablo)
 
-  and [DaFuqtor](//github.com/DaFuqtor) (it's me)
+  and [artginzburg](//github.com/artginzburg) (it's me)
   </blockquote>
 </details>
