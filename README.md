@@ -1,5 +1,5 @@
 <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">
-  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-bigsur/total" title="GitHub All Releases">
+  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-bigsur/total?color=teal" title="GitHub All Releases">
 </a>
 
 <div align="center">
@@ -73,7 +73,7 @@ brew install --cask middleclick
 - Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
 
 ```ps1
-defaults write com.artginzburg.MiddleClick fingers <int>
+defaults write com.rouge41.middleClick fingers <int>
 ```
 > Initially, it's 3 fingers to middleclick.
 
