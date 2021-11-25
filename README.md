@@ -41,7 +41,7 @@
 ### Via :beer: [Homebrew Cask](//brew.sh) (Recommended)
 
 ```ps1
-brew install --cask middleclick
+brew install --cask --no-quarantine middleclick
 ```
 
 ### Direct Download
