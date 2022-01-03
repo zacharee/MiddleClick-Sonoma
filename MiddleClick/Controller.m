@@ -263,19 +263,25 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
     }
     
     if (nFingers == fingersQua) {
-      Finger* f1 = &data[0];
-      Finger* f2 = &data[1];
-      Finger* f3 = &data[2];
-      
       if (maybeMiddleClick == YES) {
-        middleclickX = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
-        middleclickY = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
+        for (int i = 0; i < fingersQua; i++)
+        {
+          mtPoint pos = ((Finger *)&data[i])->normalized.pos;
+          middleclickX += pos.x;
+          middleclickY += pos.y;
+        }
         middleclickX2 = middleclickX;
         middleclickY2 = middleclickY;
         maybeMiddleClick = NO;
       } else {
-        middleclickX2 = (f1->normalized.pos.x + f2->normalized.pos.x + f3->normalized.pos.x);
-        middleclickY2 = (f1->normalized.pos.y + f2->normalized.pos.y + f3->normalized.pos.y);
+        middleclickX2 = 0.0f;
+        middleclickY2 = 0.0f;
+        for (int i = 0; i < fingersQua; i++)
+        {
+          mtPoint pos = ((Finger *)&data[i])->normalized.pos;
+          middleclickX2 += pos.x;
+          middleclickY2 += pos.y;
+        }
       }
     }
   }
