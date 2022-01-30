@@ -77,6 +77,15 @@ defaults write com.rouge41.middleClick fingers <int>
 ```
 > Initially, it's 3 fingers to middleclick.
 
+### Delay on wake
+If the app starts before the trackpad/magic mouse is initialized:
+> Usually appears after wake from sleep, forcing the user to manually restart the app.
+
+```ps1
+defaults write com.rouge41.middleClick autoRestartOnWake -int 3
+```
+Tweak the setting above to your needs. 3 seconds should be fine in most cases.
+
 ### Add Login Item
 
 > Make it open automatically when you log in
