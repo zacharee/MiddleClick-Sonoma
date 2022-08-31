@@ -73,7 +73,7 @@ CFMachPortRef currentEventTap;
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   [NSApplication sharedApplication];
   
-  [self registerTouchCallback];
+  registerTouchCallback();
   
   // register a callback to know when osx come back from sleep
   [[[NSWorkspace sharedWorkspace] notificationCenter]
@@ -114,12 +114,12 @@ CFMachPortRef currentEventTap;
   [self registerMouseCallback:pool];
 }
 
-- (void)stopUnstableListeners
+static void stopUnstableListeners()
 {
     NSLog(@"Stopping unstable listeners...");
 
-    [self unregisterTouchCallback];
-    [self unregisterMouseCallback];
+    unregisterTouchCallback();
+    unregisterMouseCallback();
 }
 
 - (void)startUnstableListeners
@@ -128,11 +128,11 @@ CFMachPortRef currentEventTap;
     
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
-  [self registerTouchCallback];
+  registerTouchCallback();
   [self registerMouseCallback:pool];
 }
 
-- (void)registerTouchCallback
+static void registerTouchCallback()
 {
     // Get list of all multi touch devices
     NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
@@ -144,7 +144,7 @@ CFMachPortRef currentEventTap;
       registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
     }
 }
-- (void)unregisterTouchCallback
+static void unregisterTouchCallback()
 {
     // Get list of all multi touch devices
     NSMutableArray* deviceList = currentDeviceList; // grab our device list
@@ -186,7 +186,7 @@ CFMachPortRef currentEventTap;
         [self scheduleRestart:5];
     }
 }
-- (void)unregisterMouseCallback
+static void unregisterMouseCallback()
 {
     CGEventTapEnable(currentEventTap, false);
 }
@@ -346,7 +346,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
 - (void)restartApp
 {
   NSLog(@"Restarting app functionality...");
-  [self stopUnstableListeners];
+  stopUnstableListeners();
   [self startUnstableListeners];
 }
 
