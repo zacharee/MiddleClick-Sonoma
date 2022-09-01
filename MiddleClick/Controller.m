@@ -51,6 +51,7 @@ BOOL maybeMiddleClick;
 BOOL wasThreeDown;
 NSMutableArray* currentDeviceList;
 CFMachPortRef currentEventTap;
+CFRunLoopSourceRef currentRunLoopSource;
 
 #pragma mark Implementation
 
@@ -172,6 +173,7 @@ static void unregisterTouchCallback()
     if (eventTap) {
         // Add to the current run loop.
         CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+        currentRunLoopSource = runLoopSource;
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
                            kCFRunLoopCommonModes);
 
@@ -188,6 +190,9 @@ static void unregisterTouchCallback()
 }
 static void unregisterMouseCallback()
 {
+    // Remove from the current run loop.
+    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
+    // Disable the event tap.
     CGEventTapEnable(currentEventTap, false);
 }
 
