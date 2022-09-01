@@ -196,7 +196,7 @@ static void unregisterMouseCallback()
     CGEventTapEnable(currentEventTap, false);
 }
 
-/// Schedule app to be restarted, if a restart is pending, delay it.
+/// Schedule listeners to be restarted, if a restart is pending, delay it.
 - (void)scheduleRestart:(NSTimeInterval)delay
 {
   if (_restartTimer != nil) { // Check whether the timer object was not released.
@@ -206,7 +206,7 @@ static void unregisterMouseCallback()
   _restartTimer = [NSTimer scheduledTimerWithTimeInterval:delay
                                                   repeats:NO
                                                     block:^(NSTimer* timer) {
-                                                      [self restartApp];
+                                                      [self restartListeners];
                                                     }];
 }
 
@@ -347,8 +347,8 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   return 0;
 }
 
-/// Relaunch the app when devices are connected/invalidated.
-- (void)restartApp
+/// Restart the listeners when devices are connected/invalidated.
+- (void)restartListeners
 {
   NSLog(@"Restarting app functionality...");
   stopUnstableListeners();
