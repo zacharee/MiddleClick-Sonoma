@@ -5,6 +5,8 @@
 @private
   NSStatusItem* _statusItem;
   Controller* myController;
+  NSMenuItem* accessibilityPermissionStatusItem;
+  NSMenuItem* accessibilityPermissionActionItem;
   NSMenuItem* tapItem;
   NSMenuItem* clickItem;
 }
