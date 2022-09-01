@@ -191,9 +191,13 @@ static void unregisterTouchCallback()
 static void unregisterMouseCallback()
 {
     // Remove from the current run loop.
-    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
+    if (currentRunLoopSource) {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
+    }
     // Disable the event tap.
-    CGEventTapEnable(currentEventTap, false);
+    if (currentEventTap) {
+        CGEventTapEnable(currentEventTap, false);
+    }
 }
 
 /// Schedule listeners to be restarted, if a restart is pending, delay it.
