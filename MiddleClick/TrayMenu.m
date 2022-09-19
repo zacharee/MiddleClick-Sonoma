@@ -12,11 +12,42 @@
   return self;
 }
 
+- (void)initAccessibilityPermissionStatus:(NSMenu*)menu
+{
+  BOOL hasAccessibilityPermission = AXIsProcessTrusted();
+
+  [self updateAccessibilityPermissionStatus:menu
+                 hasAccessibilityPermission:hasAccessibilityPermission];
+
+  if (!hasAccessibilityPermission) {
+    [NSTimer scheduledTimerWithTimeInterval:0.3 repeats:NO block:^(NSTimer* timer) {
+      [self initAccessibilityPermissionStatus:menu];
+    }];
+  }
+}
+- (void)updateAccessibilityPermissionStatus:(NSMenu*)menu
+                 hasAccessibilityPermission:(BOOL)isTrusted
+{
+  _statusItem.button.appearsDisabled = !isTrusted;
+  accessibilityPermissionStatusItem.hidden = isTrusted;
+  accessibilityPermissionActionItem.hidden = isTrusted;
+}
+
 - (void)openWebsite:(id)sender
 {
   NSURL* url = [NSURL
                 URLWithString:@"https://github.com/artginzburg/MiddleClick-BigSur"];
   [[NSWorkspace sharedWorkspace] openURL:url];
+}
+- (void)openAccessibilitySettings:(id)sender
+{
+  NSAppleScript *a = [[NSAppleScript alloc] initWithSource:
+                      @"tell application \"System Preferences\"\n"
+                      "activate\n"
+                      "reveal anchor \"Privacy_Accessibility\" of pane \"com.apple.preference.security\"\n"
+                      "end tell"];
+  [a executeAndReturnError:nil];
+  [a release];
 }
 
 - (void)setClick:(id)sender
@@ -56,6 +87,8 @@
   
   int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
+  [self createMenuAccessibilityPermissionItems:menu];
+  
   // Add About
   menuItem = [menu addItemWithTitle:@"About MiddleClick..."
                              action:@selector(openWebsite:)
@@ -88,6 +121,14 @@
   return menu;
 }
 
+- (void)createMenuAccessibilityPermissionItems:(NSMenu *)menu
+{
+  accessibilityPermissionStatusItem = [menu addItemWithTitle:@"Missing Accessibility permission" action:nil keyEquivalent:@""];
+  accessibilityPermissionActionItem = [menu addItemWithTitle:@"Open Privacy Preferences" action:@selector(openAccessibilitySettings:) keyEquivalent:@","];
+
+  [menu addItem:[NSMenuItem separatorItem]];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification*)notification
 {
   NSMenu* menu = [self createMenu];
@@ -110,6 +151,8 @@
   _statusItem.menu = menu;
   _statusItem.button.toolTip = @"MiddleClick";
   _statusItem.button.image = icon;
+
+  [self initAccessibilityPermissionStatus:menu];
   
   [menu release];
 }
