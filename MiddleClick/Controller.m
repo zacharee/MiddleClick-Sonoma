@@ -102,14 +102,12 @@ BOOL wasThreeDown;
           @"attached devices",
           err);
     IONotificationPortDestroy(port);
+  } else {
+    io_object_t item;
+    while ((item = IOIteratorNext(handle))) {
+      IOObjectRelease(item);
+    }
   }
-//  else {
-    /// Iterate through all the existing entries to arm the notification. Removed due to: https://stackoverflow.com/questions/1209130/iphone-sdk-exc-bad-access-with-cfrelease-for-abaddressbookref
-//    io_object_t item;
-//    while ((item = IOIteratorNext(handle))) {
-//      CFRelease(item);
-//    }
-//  }
   
   // when displays are reconfigured restart of the app is needed, so add a calback to the
   // reconifguration of Core Graphics
@@ -309,11 +307,10 @@ static void restartApp()
 void multitouchDeviceAddedCallback(void* _controller,
                                    io_iterator_t iterator)
 {
-  /// Loop through all the returned items. Removed due to: https://stackoverflow.com/questions/1209130/iphone-sdk-exc-bad-access-with-cfrelease-for-abaddressbookref
-//  io_object_t item;
-//  while ((item = IOIteratorNext(iterator))) {
-//    CFRelease(item);
-//  }
+  io_object_t item;
+  while ((item = IOIteratorNext(iterator))) {
+    IOObjectRelease(item);
+  }
   
   NSLog(@"Multitouch device added, restarting...");
   Controller* controller = (Controller*)_controller;
