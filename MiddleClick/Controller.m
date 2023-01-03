@@ -68,8 +68,8 @@ CFRunLoopSourceRef currentRunLoopSource;
   
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
-  needToClick =
-  [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"];
+  NSString* needToClickNullable = [[NSUserDefaults standardUserDefaults] valueForKey:@"needClick"];
+  needToClick = needToClickNullable ? [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"] : [self getIsSystemTapToClickDisabled];
   
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   [NSApplication sharedApplication];
@@ -389,6 +389,25 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
     MTUnregisterContactFrameCallback(device, callback); // unassign callback for device
     MTDeviceStop(device); // stop sending events
     MTDeviceRelease(device);
+}
+
+- (BOOL)getIsSystemTapToClickDisabled {
+  NSString* isSystemTapToClickEnabled = [self runCommand:(@"defaults read com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking")];
+  return [isSystemTapToClickEnabled isEqualToString:@"0\n"];
+}
+
+- (NSString *)runCommand:(NSString *)commandToRun {
+  NSPipe* pipe = [NSPipe pipe];
+  
+  NSTask* task = [[NSTask alloc] init];
+  [task setLaunchPath: @"/bin/sh"];
+  [task setArguments:@[@"-c", [NSString stringWithFormat:@"%@", commandToRun]]];
+  [task setStandardOutput:pipe];
+  
+  NSFileHandle* file = [pipe fileHandleForReading];
+  [task launch];
+  
+  return [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
 }
 
 @end
