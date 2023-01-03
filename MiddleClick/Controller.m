@@ -32,7 +32,9 @@ typedef void* MTDeviceRef;
 typedef int (*MTContactCallbackFunction)(int, Finger*, int, double, int);
 MTDeviceRef MTDeviceCreateDefault(void);
 CFMutableArrayRef MTDeviceCreateList(void);
+void MTDeviceRelease(MTDeviceRef);
 void MTRegisterContactFrameCallback(MTDeviceRef, MTContactCallbackFunction);
+void MTUnregisterContactFrameCallback(MTDeviceRef, MTContactCallbackFunction);
 void MTDeviceStart(MTDeviceRef, int); // thanks comex
 void MTDeviceStop(MTDeviceRef);
 
@@ -47,15 +49,20 @@ long fingersQua;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
+NSMutableArray* currentDeviceList;
+CFMachPortRef currentEventTap;
+CFRunLoopSourceRef currentRunLoopSource;
 
 #pragma mark Implementation
 
 @implementation Controller {
-  NSTimer* _restartTimer;
+  NSTimer* _restartTimer __weak; // Using `weak` so that the pointer is automatically set to `nil` when the referenced object is released ( https://en.wikipedia.org/wiki/Automatic_Reference_Counting#Zeroing_Weak_References ). This helps preventing fatal EXC_BAD_ACCESS.
 }
 
 - (void)start
 {
+  NSLog(@"Starting all listeners...");
+
   threeDown = NO;
   wasThreeDown = NO;
   
@@ -67,17 +74,7 @@ BOOL wasThreeDown;
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   [NSApplication sharedApplication];
   
-  // Get list of all multi touch devices
-  NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
-  
-  // Iterate and register callbacks for multitouch devices.
-  for (int i = 0; i < [deviceList count]; i++) // iterate available devices
-  {
-    MTRegisterContactFrameCallback((MTDeviceRef)[deviceList objectAtIndex:i],
-                                   touchCallback); // assign callback for device
-    MTDeviceStart((MTDeviceRef)[deviceList objectAtIndex:i],
-                  0); // start sending events
-  }
+  registerTouchCallback();
   
   // register a callback to know when osx come back from sleep
   [[[NSWorkspace sharedWorkspace] notificationCenter]
@@ -113,49 +110,113 @@ BOOL wasThreeDown;
   // reconifguration of Core Graphics
   CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, self);
   
-  // we only want to see left mouse down and left mouse up, because we only want
-  // to change that one
-  CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
-  
-  // create eventTap which listens for core grpahic events with the filter
-  // sepcified above (so left mouse down and up again)
-  CFMachPortRef eventTap = CGEventTapCreate(
-                                            kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
-                                            eventMask, mouseCallback, NULL);
-  
-  if (eventTap) {
-    // Add to the current run loop.
-    CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
-                       kCFRunLoopCommonModes);
-    
-    // Enable the event tap.
-    CGEventTapEnable(eventTap, true);
-    
-    // release pool before exit
-    [pool release];
-  } else {
-    NSLog(@"Couldn't create event tap! Check accessibility permissions.");
-    [[NSUserDefaults standardUserDefaults] setBool:1 forKey:@"NSStatusItem Visible Item-0"];
-    [self scheduleRestart:5];
-  }
+  [self registerMouseCallback:pool];
 }
 
-/// Schedule app to be restarted, if a restart is pending, delay it.
+static void stopUnstableListeners()
+{
+    NSLog(@"Stopping unstable listeners...");
+
+    unregisterTouchCallback();
+    unregisterMouseCallback();
+}
+
+- (void)startUnstableListeners
+{
+  NSLog(@"Starting unstable listeners...");
+    
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+  registerTouchCallback();
+  [self registerMouseCallback:pool];
+}
+
+static void registerTouchCallback()
+{
+    // Get list of all multi touch devices
+    NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
+    currentDeviceList = deviceList;
+
+    // Iterate and register callbacks for multitouch devices.
+    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+    {
+      registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+    }
+}
+static void unregisterTouchCallback()
+{
+    // Get list of all multi touch devices
+    NSMutableArray* deviceList = currentDeviceList; // grab our device list
+
+    // Iterate and unregister callbacks for multitouch devices.
+    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+    {
+      unregisterMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+    }
+}
+
+- (void)registerMouseCallback:(NSAutoreleasePool*)pool
+{
+    // we only want to see left mouse down and left mouse up, because we only want
+    // to change that one
+    CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
+
+    // create eventTap which listens for core grpahic events with the filter
+    // sepcified above (so left mouse down and up again)
+    CFMachPortRef eventTap = CGEventTapCreate(
+                                              kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
+                                              eventMask, mouseCallback, NULL);
+    currentEventTap = eventTap;
+
+    if (eventTap) {
+        // Add to the current run loop.
+        CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+        currentRunLoopSource = runLoopSource;
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
+                           kCFRunLoopCommonModes);
+
+        // Enable the event tap.
+        CGEventTapEnable(eventTap, true);
+
+        // release pool before exit
+        [pool release];
+    } else {
+        NSLog(@"Couldn't create event tap! Check accessibility permissions.");
+        [[NSUserDefaults standardUserDefaults] setBool:1 forKey:@"NSStatusItem Visible Item-0"];
+        [self scheduleRestart:5];
+    }
+}
+static void unregisterMouseCallback()
+{
+    // Remove from the current run loop.
+    if (currentRunLoopSource) {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
+    }
+    // Disable the event tap.
+    if (currentEventTap) {
+        CGEventTapEnable(currentEventTap, false);
+    }
+}
+
+/// Schedule listeners to be restarted, if a restart is pending, delay it.
 - (void)scheduleRestart:(NSTimeInterval)delay
 {
-  [_restartTimer invalidate]; // Invalidate any existing timer.
+  if (_restartTimer != nil) { // Check whether the timer object was not released.
+    [_restartTimer invalidate]; // Invalidate any existing timer.
+  }
   
   _restartTimer = [NSTimer scheduledTimerWithTimeInterval:delay
                                                   repeats:NO
                                                     block:^(NSTimer* timer) {
-                                                      restartApp();
+                                                      [self restartListeners];
                                                     }];
 }
 
 // Callback for system wake up. This restarts the app to initialize callbacks.
+// Can be tested by entering `pmset sleepnow` in the Terminal
 - (void)receiveWakeNote:(NSNotification*)note
 {
+  NSLog(@"System woke up, restarting...");
   [self scheduleRestart:10];
 }
 
@@ -288,19 +349,12 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   return 0;
 }
 
-/// Relaunch the app when devices are connected/invalidated.
-static void restartApp()
+/// Restart the listeners when devices are connected/invalidated.
+- (void)restartListeners
 {
-  NSTask *task = [[[NSTask alloc] init] autorelease];
-  NSMutableArray *args = [NSMutableArray array];
-  [args addObject:@"-c"];
-  [args addObject:[NSString stringWithFormat:@"sleep %f; open \"%@\"", 1.0, [[NSBundle mainBundle] bundlePath]]];
-  [task setLaunchPath:@"/bin/sh"];
-  [task setArguments:args];
-  [task launch];
-  NSLog(@"Restarting app...");
-  
-  [NSApp terminate:NULL];
+  NSLog(@"Restarting app functionality...");
+  stopUnstableListeners();
+  [self startUnstableListeners];
 }
 
 /// Callback when a multitouch device is added.
@@ -327,6 +381,14 @@ void displayReconfigurationCallBack(CGDirectDisplayID display, CGDisplayChangeSu
   }
 }
 
-
+static void registerMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunction callback) {
+    MTRegisterContactFrameCallback(device, callback); // assign callback for device
+    MTDeviceStart(device, 0); // start sending events
+}
+static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunction callback) {
+    MTUnregisterContactFrameCallback(device, callback); // unassign callback for device
+    MTDeviceStop(device); // stop sending events
+    MTDeviceRelease(device);
+}
 
 @end
