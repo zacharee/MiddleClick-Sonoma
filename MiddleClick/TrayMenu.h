@@ -7,11 +7,11 @@
   Controller* myController;
   NSMenuItem* accessibilityPermissionStatusItem;
   NSMenuItem* accessibilityPermissionActionItem;
-  NSMenuItem* tapItem;
-  NSMenuItem* clickItem;
+  NSMenuItem* infoItem;
+  NSMenuItem* tapToClickItem;
 }
 - (id)initWithController:(Controller*)ctrl;
 - (void)setChecks;
-- (void)setClick:(id)sender;
-- (void)setTap:(id)sender;
+- (void)toggleTapToClick:(id)sender;
+- (void)resetTapToClick:(id)sender;
 @end

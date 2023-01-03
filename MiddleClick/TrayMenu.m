@@ -57,27 +57,27 @@
   }
 }
 
-- (void)setClick:(id)sender
+- (void)toggleTapToClick:(id)sender
 {
-  [myController setMode:YES];
+  [myController setMode:[sender state] == NSControlStateValueOn];
   [self setChecks];
 }
 
-- (void)setTap:(id)sender
+- (void)resetTapToClick:(id)sender
 {
-  [myController setMode:NO];
+  [myController resetClickMode];
   [self setChecks];
 }
 
 - (void)setChecks
 {
-  if ([myController getClickMode]) {
-    [clickItem setState:NSControlStateValueOn];
-    [tapItem setState:NSControlStateValueOff];
-  } else {
-    [clickItem setState:NSControlStateValueOff];
-    [tapItem setState:NSControlStateValueOn];
-  }
+  bool clickMode = [myController getClickMode];
+  NSString* clickModeInfo = clickMode ? @"Click" : @"Click or Tap";
+  
+  int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
+  
+  [infoItem setTitle:[clickModeInfo stringByAppendingFormat: @" with %d Fingers", fingersQua]];
+  [tapToClickItem setState:clickMode ? NSControlStateValueOff : NSControlStateValueOn];
 }
 
 - (void)actionQuit:(id)sender
@@ -92,8 +92,6 @@
   
   
   
-  int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
-  
   [self createMenuAccessibilityPermissionItems:menu];
   
   // Add About
@@ -104,15 +102,22 @@
   
   [menu addItem:[NSMenuItem separatorItem]];
   
-  clickItem = [menu addItemWithTitle:[NSString stringWithFormat: @"%d Finger Click", fingersQua]
-                              action:@selector(setClick:)
-                       keyEquivalent:@""];
-  [clickItem setTarget:self];
+  infoItem = [menu addItemWithTitle:@""
+                             action:nil
+                      keyEquivalent:@""];
+  [infoItem setTarget:self];
   
-  tapItem = [menu addItemWithTitle:[NSString stringWithFormat: @"%d Finger Tap", fingersQua]
-                            action:@selector(setTap:)
-                     keyEquivalent:@""];
-  [tapItem setTarget:self];
+  tapToClickItem = [menu addItemWithTitle:@"Tap to click"
+                                   action:@selector(toggleTapToClick:)
+                            keyEquivalent:@""];
+  [tapToClickItem setTarget:self];
+  
+  NSMenuItem* resetItem = [menu addItemWithTitle:@"Reset to System Settings"
+                                          action:@selector(resetTapToClick:)
+                                   keyEquivalent:@""];
+  resetItem.alternate = YES;
+  resetItem.keyEquivalentModifierMask = NSEventModifierFlagOption;
+  [resetItem setTarget:self];
   
   [self setChecks];
   

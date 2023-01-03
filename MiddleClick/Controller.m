@@ -230,6 +230,11 @@ static void unregisterMouseCallback()
   [[NSUserDefaults standardUserDefaults] setBool:click forKey:@"needClick"];
   needToClick = click;
 }
+- (void)resetClickMode
+{
+  [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"needClick"];
+  needToClick = [self getIsSystemTapToClickDisabled];
+}
 
 // listening to mouse clicks to replace them with middle clicks if there are 3
 // fingers down at the time of clicking this is done by replacing the left click
