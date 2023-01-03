@@ -41,13 +41,20 @@
 }
 - (void)openAccessibilitySettings:(id)sender
 {
-  NSAppleScript *a = [[NSAppleScript alloc] initWithSource:
-                      @"tell application \"System Preferences\"\n"
-                      "activate\n"
-                      "reveal anchor \"Privacy_Accessibility\" of pane \"com.apple.preference.security\"\n"
-                      "end tell"];
-  [a executeAndReturnError:nil];
-  [a release];
+  BOOL isPreCatalina = (floor(NSAppKitVersionNumber) < NSAppKitVersionNumber10_15);
+  if (isPreCatalina) {
+    NSAppleScript *a = [[NSAppleScript alloc] initWithSource:
+                        @"tell application \"System Preferences\"\n"
+                        "activate\n"
+                        "reveal anchor \"Privacy_Accessibility\" of pane \"com.apple.preference.security\"\n"
+                        "end tell"];
+    [a executeAndReturnError:nil];
+    [a release];
+  } else {
+    NSURL* url = [NSURL
+                  URLWithString:@"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"];
+    [[NSWorkspace sharedWorkspace] openURL:url];
+  }
 }
 
 - (void)setClick:(id)sender
