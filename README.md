@@ -20,23 +20,27 @@
 <h2 align="right">:mag: Usage</h2>
 
 <blockquote align="right">
-  
-  It's more than just `⌘`+click
+
+It's more than just `⌘`+click
+
 </blockquote>
 
 <p align="right">
-  
-  `System-wide` · close tabs by middleclicking on them
+
+`System-wide` · close tabs by middleclicking on them
+
 </p>
 
 <p align="right">
-  
-  `In Safari` · middleclicking on a link opens it in background
+
+`In Safari` · middleclicking on a link opens it in background
+
 </p>
 
 <p align="right">
-  
-  `In Terminal` · paste selected text
+
+`In Terminal` · paste selected text
+
 </p>
 
 <br>
@@ -63,7 +67,7 @@ brew install --cask --no-quarantine middleclick
     </a>
   </summary>
 
-  > Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">Earlier Releases</a>
+> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">Earlier Releases</a>
 
 </details>
 
@@ -77,11 +81,13 @@ brew install --cask --no-quarantine middleclick
 > To recover the item, just open MiddleClick when it's already running
 
 ### Number of Fingers
+
 - Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
 
 ```ps1
 defaults write com.rouge41.middleClick fingers <int>
 ```
+
 > Initially, it's 3 fingers to middleclick.
 
 ### Add Login Item
@@ -89,9 +95,9 @@ defaults write com.rouge41.middleClick fingers <int>
 > Make it open automatically when you log in
 
 <details>
-  
+
 <summary>Just add MiddleClick to your "Login Items". <p align="right">(it's handy to be done using command line)</p></summary>
-  
+
 ```ps1
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
 ```
@@ -121,11 +127,12 @@ osascript -e 'tell application "System Events" to make login item at end with pr
   <summary><b>Credits</b></summary>
   <blockquote>
   <br>
-    
-  This project was made by [Clément Beffa](//clement.beffa.org/),
 
-  Extended by [LoPablo](//github.com/LoPablo)
+This project was made by [Clément Beffa](//clement.beffa.org/),
 
-  and [artginzburg](//github.com/artginzburg) (it's me)
+Extended by [LoPablo](//github.com/LoPablo)
+
+and [artginzburg](//github.com/artginzburg) (it's me)
+
   </blockquote>
 </details>
