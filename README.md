@@ -44,6 +44,8 @@
 brew install --cask --no-quarantine middleclick
 ```
 
+> Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/middleclick.rb) if you're interested
+
 ### Direct Download
 
 <details>
