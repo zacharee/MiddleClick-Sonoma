@@ -34,6 +34,11 @@
   `In Safari` · middleclicking on a link opens it in background
 </p>
 
+<p align="right">
+  
+  `In Terminal` · paste selected text
+</p>
+
 <br>
 
 ## Install
