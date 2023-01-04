@@ -36,7 +36,7 @@
 - (void)openWebsite:(id)sender
 {
   NSURL* url = [NSURL
-                URLWithString:@"https://github.com/artginzburg/MiddleClick-BigSur"];
+                URLWithString:@"https://github.com/artginzburg/MiddleClick-Ventura"];
   [[NSWorkspace sharedWorkspace] openURL:url];
 }
 - (void)openAccessibilitySettings:(id)sender

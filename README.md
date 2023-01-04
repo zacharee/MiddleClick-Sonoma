@@ -1,5 +1,5 @@
-<a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">
-  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-bigsur/total?color=teal" title="GitHub All Releases">
+<a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">
+  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-ventura/total?color=teal" title="GitHub All Releases">
 </a>
 
 <div align="center">
@@ -59,15 +59,15 @@ brew install --cask --no-quarantine middleclick
 
 <details>
   <summary>
-    <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases/latest/download/MiddleClick.zip">
+    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest/download/MiddleClick.zip">
       Latest Release
     </a>&nbsp·&nbsp
-    <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases/latest">
-      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-BigSur?label=%20&color=gray">
+    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest">
+      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-Ventura?label=%20&color=gray">
     </a>
   </summary>
 
-> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-BigSur/releases">Earlier Releases</a>
+> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">Earlier Releases</a>
 
 </details>
 
