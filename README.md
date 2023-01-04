@@ -10,7 +10,7 @@
     <b>Emulate a scroll wheel click with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
-    with <b>macOS</b> Big Sur<a href="https://www.apple.com/macos/big-sur/"><sup>11.5</sup></a> support!
+    with <b>macOS</b> Ventura<a href="https://www.apple.com/macos/ventura/"><sup>13.1</sup></a> support!
   </p>
   <br>
 </div>
