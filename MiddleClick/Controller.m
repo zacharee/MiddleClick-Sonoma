@@ -286,8 +286,9 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
     }
   } else {
     if (nFingers == 0) {
+      NSTimeInterval elapsedTime = touchStartTime ? -[touchStartTime timeIntervalSinceNow] : 0;
       touchStartTime = NULL;
-      if (middleclickX + middleclickY) {
+      if (middleclickX + middleclickY && elapsedTime <= 0.5f) {
         float delta = ABS(middleclickX - middleclickX2) + ABS(middleclickY - middleclickY2);
         if (delta < 0.4f) {
           // Emulate a middle click
