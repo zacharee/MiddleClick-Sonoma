@@ -273,17 +273,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
   if (needToClick) {
-    if (nFingers == fingersQua) {
-      if (!threeDown) {
-        threeDown = YES;
-      }
-    }
-    
-    if (nFingers != fingersQua) {
-      if (threeDown) {
-        threeDown = NO;
-      }
-    }
+    threeDown = nFingers == fingersQua;
   } else {
     if (nFingers == 0) {
       touchStartTime = NULL;
