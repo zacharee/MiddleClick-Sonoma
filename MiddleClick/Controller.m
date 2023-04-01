@@ -133,7 +133,7 @@ static void stopUnstableListeners()
 
 static void registerTouchCallback()
 {
-    // Get list of all multi touch devices
+    /// Get list of all multi touch devices
     NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
     currentDeviceList = deviceList;
 
@@ -145,7 +145,7 @@ static void registerTouchCallback()
 }
 static void unregisterTouchCallback()
 {
-    // Get list of all multi touch devices
+    /// Get list of all multi touch devices
     NSMutableArray* deviceList = currentDeviceList; // grab our device list
 
     // Iterate and unregister callbacks for multitouch devices.
@@ -157,12 +157,12 @@ static void unregisterTouchCallback()
 
 - (void)registerMouseCallback:(NSAutoreleasePool*)pool
 {
-    // we only want to see left mouse down and left mouse up, because we only want
-    // to change that one
+    /// we only want to see left mouse down and left mouse up, because we only want
+    /// to change that one
     CGEventMask eventMask = (CGEventMaskBit(kCGEventLeftMouseDown) | CGEventMaskBit(kCGEventLeftMouseUp));
 
-    // create eventTap which listens for core grpahic events with the filter
-    // sepcified above (so left mouse down and up again)
+    /// create eventTap which listens for core grpahic events with the filter
+    /// specified above (so left mouse down and up again)
     CFMachPortRef eventTap = CGEventTapCreate(
                                               kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
                                               eventMask, mouseCallback, NULL);
@@ -212,8 +212,8 @@ static void unregisterMouseCallback()
                                                     }];
 }
 
-// Callback for system wake up. This restarts the app to initialize callbacks.
-// Can be tested by entering `pmset sleepnow` in the Terminal
+/// Callback for system wake up. This restarts the app to initialize callbacks.
+/// Can be tested by entering `pmset sleepnow` in the Terminal
 - (void)receiveWakeNote:(NSNotification*)note
 {
   NSLog(@"System woke up, restarting...");
@@ -236,12 +236,12 @@ static void unregisterMouseCallback()
   needToClick = [self getIsSystemTapToClickDisabled];
 }
 
-// listening to mouse clicks to replace them with middle clicks if there are 3
-// fingers down at the time of clicking this is done by replacing the left click
-// down with a other click down and setting the button number to middle click
-// when 3 fingers are down when clicking, and by replacing left click up with
-// other click up and setting three button number to middle click when 3 fingers
-// were down when the last click went down.
+/// listening to mouse clicks to replace them with middle clicks if there are 3
+/// fingers down at the time of clicking this is done by replacing the left click
+/// down with a other click down and setting the button number to middle click
+/// when 3 fingers are down when clicking, and by replacing left click up with
+/// other click up and setting three button number to middle click when 3 fingers
+/// were down when the last click went down.
 CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
                          CGEventRef event, void* refcon)
 {
@@ -264,8 +264,8 @@ CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
   return event;
 }
 
-// mulittouch callback, see what is touched. If 3 are on the mouse set
-// threedowns, else unset threedowns.
+/// Mulittouch callback, see what is touched. If 3 are on the mouse set
+/// threedowns, else unset threedowns.
 int touchCallback(int device, Finger* data, int nFingers, double timestamp,
                   int frame)
 {
