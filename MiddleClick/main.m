@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
   
   NSApplication* app = [NSApplication sharedApplication];
   
-  Controller* con = [[Controller alloc] init];
+  Controller* con = [Controller new];
   [con start];
   
   // add Menu Bar item

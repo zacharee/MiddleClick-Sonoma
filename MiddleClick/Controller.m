@@ -71,7 +71,7 @@ CFRunLoopSourceRef currentRunLoopSource;
   NSString* needToClickNullable = [[NSUserDefaults standardUserDefaults] valueForKey:@"needClick"];
   needToClick = needToClickNullable ? [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"] : [self getIsSystemTapToClickDisabled];
   
-  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  NSAutoreleasePool* pool = [NSAutoreleasePool new];
   [NSApplication sharedApplication];
   
   registerTouchCallback();
@@ -125,7 +125,7 @@ static void stopUnstableListeners()
 {
   NSLog(@"Starting unstable listeners...");
     
-  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  NSAutoreleasePool* pool = [NSAutoreleasePool new];
 
   registerTouchCallback();
   [self registerMouseCallback:pool];
@@ -269,7 +269,7 @@ CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
 int touchCallback(int device, Finger* data, int nFingers, double timestamp,
                   int frame)
 {
-  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  NSAutoreleasePool* pool = [NSAutoreleasePool new];
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:@"fingers"];
   
   if (needToClick) {
@@ -295,7 +295,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
         }
       }
     } else if (nFingers > 0 && touchStartTime == NULL) {
-      NSDate* now = [[NSDate alloc] init];
+      NSDate* now = [NSDate new];
       touchStartTime = [now retain];
       [now release];
       
@@ -394,7 +394,7 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
 - (NSString *)runCommand:(NSString *)commandToRun {
   NSPipe* pipe = [NSPipe pipe];
   
-  NSTask* task = [[NSTask alloc] init];
+  NSTask* task = [NSTask new];
   [task setLaunchPath: @"/bin/sh"];
   [task setArguments:@[@"-c", [NSString stringWithFormat:@"%@", commandToRun]]];
   [task setStandardOutput:pipe];
