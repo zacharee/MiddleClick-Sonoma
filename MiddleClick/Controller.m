@@ -285,13 +285,17 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
           // get the current pointer location
           CGEventRef ourEvent = CGEventCreate(NULL);
           CGPoint ourLoc = CGEventGetLocation(ourEvent);
+          CFRelease(ourEvent);
           
-          CGEventPost(kCGHIDEventTap,
-                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown,
-                                              ourLoc, kCGMouseButtonCenter));
-          CGEventPost(kCGHIDEventTap,
-                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp,
-                                              ourLoc, kCGMouseButtonCenter));
+          CGMouseButton buttonType = kCGMouseButtonCenter;
+          
+          CGEventRef mouseDownEvent = CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown, ourLoc, buttonType);
+          CGEventPost(kCGHIDEventTap, mouseDownEvent);
+          CFRelease(mouseDownEvent);
+          
+          CGEventRef mouseUpEvent = CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp, ourLoc, buttonType);
+          CGEventPost(kCGHIDEventTap, mouseUpEvent);
+          CFRelease(mouseUpEvent);
         }
       }
     } else if (nFingers > 0 && touchStartTime == NULL) {
