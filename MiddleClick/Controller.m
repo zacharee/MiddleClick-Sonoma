@@ -289,13 +289,8 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
           
           CGMouseButton buttonType = kCGMouseButtonCenter;
           
-          CGEventRef mouseDownEvent = CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown, ourLoc, buttonType);
-          CGEventPost(kCGHIDEventTap, mouseDownEvent);
-          CFRelease(mouseDownEvent);
-          
-          CGEventRef mouseUpEvent = CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp, ourLoc, buttonType);
-          CGEventPost(kCGHIDEventTap, mouseUpEvent);
-          CFRelease(mouseUpEvent);
+          postMouseEvent(kCGEventOtherMouseDown, buttonType, ourLoc);
+          postMouseEvent(kCGEventOtherMouseUp, buttonType, ourLoc);
         }
       }
     } else if (nFingers > 0 && touchStartTime == NULL) {
@@ -388,6 +383,12 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
     MTUnregisterContactFrameCallback(device, callback); // unassign callback for device
     MTDeviceStop(device); // stop sending events
     MTDeviceRelease(device);
+}
+
+static void postMouseEvent(CGEventType eventType, CGMouseButton buttonType, CGPoint ourLoc) {
+    CGEventRef mouseEvent = CGEventCreateMouseEvent(NULL, eventType, ourLoc, buttonType);
+    CGEventPost(kCGHIDEventTap, mouseEvent);
+    CFRelease(mouseEvent);
 }
 
 - (BOOL)getIsSystemTapToClickDisabled {
