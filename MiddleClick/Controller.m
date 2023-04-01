@@ -402,7 +402,11 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
   NSFileHandle* file = [pipe fileHandleForReading];
   [task launch];
   
-  return [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+  NSString *output = [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+  
+  [task release];
+  
+  return [output autorelease];
 }
 
 @end
