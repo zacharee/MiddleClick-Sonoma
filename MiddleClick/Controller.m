@@ -285,13 +285,12 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
           // get the current pointer location
           CGEventRef ourEvent = CGEventCreate(NULL);
           CGPoint ourLoc = CGEventGetLocation(ourEvent);
+          CFRelease(ourEvent);
           
-          CGEventPost(kCGHIDEventTap,
-                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseDown,
-                                              ourLoc, kCGMouseButtonCenter));
-          CGEventPost(kCGHIDEventTap,
-                      CGEventCreateMouseEvent(NULL, kCGEventOtherMouseUp,
-                                              ourLoc, kCGMouseButtonCenter));
+          CGMouseButton buttonType = kCGMouseButtonCenter;
+          
+          postMouseEvent(kCGEventOtherMouseDown, buttonType, ourLoc);
+          postMouseEvent(kCGEventOtherMouseUp, buttonType, ourLoc);
         }
       }
     } else if (nFingers > 0 && touchStartTime == NULL) {
@@ -386,6 +385,12 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
     MTDeviceRelease(device);
 }
 
+static void postMouseEvent(CGEventType eventType, CGMouseButton buttonType, CGPoint ourLoc) {
+    CGEventRef mouseEvent = CGEventCreateMouseEvent(NULL, eventType, ourLoc, buttonType);
+    CGEventPost(kCGHIDEventTap, mouseEvent);
+    CFRelease(mouseEvent);
+}
+
 - (BOOL)getIsSystemTapToClickDisabled {
   NSString* isSystemTapToClickEnabled = [self runCommand:(@"defaults read com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking")];
   return [isSystemTapToClickEnabled isEqualToString:@"0\n"];
@@ -402,7 +407,11 @@ static void unregisterMTDeviceCallback(MTDeviceRef device, MTContactCallbackFunc
   NSFileHandle* file = [pipe fileHandleForReading];
   [task launch];
   
-  return [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+  NSString *output = [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+  
+  [task release];
+  
+  return [output autorelease];
 }
 
 @end

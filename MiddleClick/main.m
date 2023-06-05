@@ -19,5 +19,9 @@ int main(int argc, char* argv[])
   
   [app run];
   
+  // Suppress memory leak warnings in "Product" > "Analyze". It sounds pointless releasing objects right before the app closes and releases absolutely everything — but I'm OK with it as long as no warnings occur.
+  [con release];
+  [menu release];
+  
   return EXIT_SUCCESS;
 }
