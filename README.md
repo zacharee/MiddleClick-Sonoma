@@ -1,5 +1,5 @@
-<a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">
-  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-ventura/total?color=teal" title="GitHub All Releases">
+<a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases">
+  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-sonoma/total?color=teal" title="GitHub All Releases">
 </a>
 
 <div align="center">
@@ -10,7 +10,7 @@
     <b>Emulate a scroll wheel click with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
-    with <b>macOS</b> Ventura<a href="https://www.apple.com/macos/ventura/"><sup>13.1</sup></a> support!
+    with <b>macOS</b> Sonoma<a href="https://www.apple.com/macos/sonoma/"><sup>14</sup></a> support!
   </p>
   <br>
 </div>
@@ -59,15 +59,15 @@ brew install --cask --no-quarantine middleclick
 
 <details>
   <summary>
-    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest/download/MiddleClick.zip">
+    <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases/latest/download/MiddleClick.zip">
       Latest Release
     </a>&nbsp·&nbsp
-    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest">
-      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-Ventura?label=%20&color=gray">
+    <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases/latest">
+      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-Sonoma?label=%20&color=gray">
     </a>
   </summary>
 
-> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">Earlier Releases</a>
+> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases">Earlier Releases</a>
 
 </details>
 
