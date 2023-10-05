@@ -53,7 +53,7 @@ It's more than just `⌘`+click
 brew install --cask --no-quarantine middleclick
 ```
 
-> Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/middleclick.rb) if you're interested
+> Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/m/middleclick.rb) if you're interested
 
 ### Direct Download
 
