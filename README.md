@@ -114,20 +114,20 @@ defaults write com.rouge41.middleClick fingers 4
 - The position is normalized and values go from 0 to 1.
 
 ```ps1
-defaults write com.rouge41.middleClick maxDistanceDelta 0.05
+defaults write com.rouge41.middleClick maxDistanceDelta 0.03
 ```
 
-> Default is 0.4
+> Default is 0.05
 
 #### Max Time Delta
 
 - The maximum interval in milliseconds between touch and release for a tap to be considered valid.
 
 ```ps1
-defaults write com.rouge41.middleClick maxTimeDelta 300
+defaults write com.rouge41.middleClick maxTimeDelta 150
 ```
 
-> Default is 500
+> Default is 300
 
 ---
 
