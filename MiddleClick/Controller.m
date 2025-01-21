@@ -50,7 +50,6 @@ long fingersQua;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
-NSMutableArray* currentDeviceList;
 CFMachPortRef currentEventTap;
 CFRunLoopSourceRef currentRunLoopSource;
 
@@ -132,28 +131,37 @@ static void stopUnstableListeners(void)
   [self registerMouseCallback:pool];
 }
 
+static NSMutableArray* currentDeviceList = nil;
+
 static void registerTouchCallback(void)
 {
-    /// Get list of all multi touch devices
+    /// Get list of all multi-touch devices
     NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
-    currentDeviceList = deviceList;
+    if (currentDeviceList != nil) {
+        [currentDeviceList release]; // Release the old list if it exists
+    }
+    currentDeviceList = deviceList; // Assign the new list (retained)
 
-    // Iterate and register callbacks for multitouch devices.
+    // Iterate and register callbacks for multi-touch devices.
     for (int i = 0; i < [deviceList count]; i++) // iterate available devices
     {
-      registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+        registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
     }
 }
+
 static void unregisterTouchCallback(void)
 {
-    /// Get list of all multi touch devices
-    NSMutableArray* deviceList = currentDeviceList; // grab our device list
-
-    // Iterate and unregister callbacks for multitouch devices.
-    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
-    {
-      unregisterMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+    if (currentDeviceList == nil) {
+        return; // No device list to process
     }
+
+    /// Iterate and unregister callbacks for multi-touch devices.
+    for (int i = 0; i < [currentDeviceList count]; i++) // iterate available devices
+    {
+        unregisterMTDeviceCallback((MTDeviceRef)[currentDeviceList objectAtIndex:i], touchCallback);
+    }
+
+    currentDeviceList = nil; // Reset the global pointer
 }
 
 - (void)registerMouseCallback:(NSAutoreleasePool*)pool
