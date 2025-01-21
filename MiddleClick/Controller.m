@@ -246,7 +246,6 @@ static void unregisterMouseCallback(void)
 CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
                          CGEventRef event, void* refcon)
 {
-  if (needToClick) {
     if (threeDown && type == kCGEventLeftMouseDown) {
       wasThreeDown = YES;
       CGEventSetType(event, kCGEventOtherMouseDown);
@@ -261,7 +260,6 @@ CGEventRef mouseCallback(CGEventTapProxy proxy, CGEventType type,
       CGEventSetIntegerValueField(event, kCGMouseEventButtonNumber,
                                   kCGMouseButtonCenter);
     }
-  }
   return event;
 }
 
@@ -274,10 +272,10 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
   float maxDistanceDelta = [[NSUserDefaults standardUserDefaults] floatForKey:kMaxDistanceDelta];
   float maxTimeDelta = [[NSUserDefaults standardUserDefaults] integerForKey:kMaxTimeDeltaMs] / 1000.f;
-  
-  if (needToClick) {
+    
     threeDown = nFingers == fingersQua;
-  } else {
+  
+  if (!needToClick) {
     if (nFingers == 0) {
       NSTimeInterval elapsedTime = touchStartTime ? -[touchStartTime timeIntervalSinceNow] : 0;
       touchStartTime = NULL;
