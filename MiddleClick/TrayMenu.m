@@ -73,11 +73,14 @@
 - (void)setChecks
 {
   bool clickMode = [myController getClickMode];
-  NSString* clickModeInfo = clickMode ? @"Click" : @"Click or Tap";
+  NSString* clickModeInfo = [NSString stringWithFormat:@"%@%@", @"Click", clickMode ? @"" : @" or Tap"];
   
   int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
+  BOOL allowMoreFingers = (bool)[[NSUserDefaults standardUserDefaults] boolForKey:kAllowMoreFingers];
   
-  [infoItem setTitle:[clickModeInfo stringByAppendingFormat: @" with %d Fingers", fingersQua]];
+  NSString* fingersInfo = [NSString stringWithFormat:@" with %d%@ Fingers", fingersQua, allowMoreFingers ? @"+" : @""];
+  
+  [infoItem setTitle:[clickModeInfo stringByAppendingString: fingersInfo]];
   [tapToClickItem setState:clickMode ? NSControlStateValueOff : NSControlStateValueOn];
 }
 

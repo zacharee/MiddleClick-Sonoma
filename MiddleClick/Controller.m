@@ -47,6 +47,7 @@ float middleclickX2, middleclickY2;
 
 BOOL needToClick;
 long fingersQua;
+BOOL allowMoreFingers;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
@@ -70,6 +71,7 @@ static const int wakeRestartTimeout = fastRestart ? 2 : 10;
   wasThreeDown = NO;
   
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
+  allowMoreFingers = [[NSUserDefaults standardUserDefaults] boolForKey:kAllowMoreFingers];
   
   NSString* needToClickNullable = [[NSUserDefaults standardUserDefaults] valueForKey:@"needClick"];
   needToClick = needToClickNullable ? [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"] : [self getIsSystemTapToClickDisabled];
@@ -292,7 +294,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   float maxTimeDelta = [[NSUserDefaults standardUserDefaults] integerForKey:kMaxTimeDeltaMs] / 1000.f;
   
   if (needToClick) {
-    threeDown = nFingers == fingersQua;
+    threeDown = allowMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua;
   } else {
     if (nFingers == 0) {
       NSTimeInterval elapsedTime = touchStartTime ? -[touchStartTime timeIntervalSinceNow] : 0;
@@ -329,13 +331,13 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
       }
     }
     
-    if (nFingers > fingersQua) {
+    if (!allowMoreFingers && nFingers > fingersQua) {
       maybeMiddleClick = NO;
       middleclickX = 0.0f;
       middleclickY = 0.0f;
     }
     
-    if (nFingers == fingersQua) {
+    if (allowMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua) {
       if (maybeMiddleClick == YES) {
         for (int i = 0; i < fingersQua; i++)
         {
