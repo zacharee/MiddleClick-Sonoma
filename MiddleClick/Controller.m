@@ -278,11 +278,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   float maxTimeDelta = [[NSUserDefaults standardUserDefaults] integerForKey:kMaxTimeDeltaMs] / 1000.f;
   
   if (needToClick) {
-    if (canBeMoreFingers) {
-      threeDown = nFingers >= fingersQua;
-    } else {
-      threeDown = nFingers == fingersQua;
-    }
+    threeDown = canBeMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua;
   } else {
     if (nFingers == 0) {
       NSTimeInterval elapsedTime = touchStartTime ? -[touchStartTime timeIntervalSinceNow] : 0;
@@ -319,13 +315,13 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
       }
     }
     
-    if (nFingers > fingersQua) {
+    if (!canBeMoreFingers && nFingers > fingersQua) {
       maybeMiddleClick = NO;
       middleclickX = 0.0f;
       middleclickY = 0.0f;
     }
     
-    if (nFingers == fingersQua) {
+    if (canBeMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua) {
       if (maybeMiddleClick == YES) {
         for (int i = 0; i < fingersQua; i++)
         {
