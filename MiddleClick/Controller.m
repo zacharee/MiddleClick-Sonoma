@@ -143,22 +143,20 @@ static void registerTouchCallback(void)
     currentDeviceList = deviceList; // Assign the new list (retained)
 
     // Iterate and register callbacks for multi-touch devices.
-    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+    for (id device in currentDeviceList) // iterate available devices
     {
-        registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+        registerMTDeviceCallback((MTDeviceRef)device, touchCallback);
     }
 }
 
 static void unregisterTouchCallback(void)
 {
-    if (currentDeviceList == nil) {
-        return; // No device list to process
-    }
+    if (currentDeviceList == nil) return; // No device list to process
 
-    /// Iterate and unregister callbacks for multi-touch devices.
-    for (int i = 0; i < [currentDeviceList count]; i++) // iterate available devices
+    // Iterate and unregister callbacks for multi-touch devices.
+    for (id device in currentDeviceList) // iterate available devices
     {
-        unregisterMTDeviceCallback((MTDeviceRef)[currentDeviceList objectAtIndex:i], touchCallback);
+        unregisterMTDeviceCallback((MTDeviceRef)device, touchCallback);
     }
 
     currentDeviceList = nil; // Reset the global pointer
