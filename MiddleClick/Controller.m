@@ -53,6 +53,9 @@ BOOL wasThreeDown;
 CFMachPortRef currentEventTap;
 CFRunLoopSourceRef currentRunLoopSource;
 
+static const BOOL fastRestart = false;
+static const int wakeRestartTimeout = fastRestart ? 2 : 10;
+
 #pragma mark Implementation
 
 @implementation Controller {
@@ -230,8 +233,8 @@ static void unregisterMouseCallback(void)
 /// Can be tested by entering `pmset sleepnow` in the Terminal
 - (void)receiveWakeNote:(NSNotification*)note
 {
-  NSLog(@"System woke up, restarting...");
-  [self scheduleRestart:10];
+  NSLog(@"System woke up, restarting in %d...", wakeRestartTimeout);
+  [self scheduleRestart:wakeRestartTimeout];
 }
 
 - (BOOL)getClickMode
