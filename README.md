@@ -1,5 +1,5 @@
-<a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">
-  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-ventura/total?color=teal" title="GitHub All Releases">
+<a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases">
+  <img align="right" src="https://img.shields.io/github/downloads/artginzburg/middleclick-sonoma/total?color=teal" title="GitHub All Releases">
 </a>
 
 <div align="center">
@@ -10,7 +10,7 @@
     <b>Emulate a scroll wheel click with three finger Click or Tap on MacBook trackpad and Magic Mouse</b>
   </p>
   <p>
-    with <b>macOS</b> Ventura<a href="https://www.apple.com/macos/ventura/"><sup>13.1</sup></a> support!
+    with <b>macOS</b> Sonoma<a href="https://www.apple.com/macos/sonoma/"><sup>14</sup></a> support!
   </p>
   <br>
 </div>
@@ -33,7 +33,7 @@ It's more than just `⌘`+click
 
 <p align="right">
 
-`In Safari` · middleclicking on a link opens it in background
+`In Safari` · middleclicking on a link opens it in the background as a new tab
 
 </p>
 
@@ -53,21 +53,21 @@ It's more than just `⌘`+click
 brew install --cask --no-quarantine middleclick
 ```
 
-> Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/middleclick.rb) if you're interested
+> Check out [the cask](https://github.com/Homebrew/homebrew-cask/blob/master/Casks/m/middleclick.rb) if you're interested
 
 ### Direct Download
 
 <details>
   <summary>
-    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest/download/MiddleClick.zip">
+    <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases/latest/download/MiddleClick.zip">
       Latest Release
     </a>&nbsp·&nbsp
-    <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases/latest">
-      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-Ventura?label=%20&color=gray">
+    <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases/latest">
+      <img align="center" alt="GitHub release" src="https://img.shields.io/github/release/artginzburg/middleclick-Sonoma?label=%20&color=gray">
     </a>
   </summary>
 
-> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-Ventura/releases">Earlier Releases</a>
+> Additionally, you may also view <a href="https://github.com/artginzburg/MiddleClick-Sonoma/releases">Earlier Releases</a>
 
 </details>
 
@@ -79,16 +79,6 @@ brew install --cask --no-quarantine middleclick
 2. Let it go
 
 > To recover the item, just open MiddleClick when it's already running
-
-### Number of Fingers
-
-- Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
-
-```ps1
-defaults write com.rouge41.middleClick fingers <int>
-```
-
-> Initially, it's 3 fingers to middleclick.
 
 ### Add Login Item
 
@@ -103,6 +93,52 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 ```
 
 </details>
+
+## Preferences
+
+### Number of Fingers
+
+- Want to use 4, 5 or 2 fingers for middleclicking? No trouble. Even 10 is possible.
+
+```ps1
+defaults write com.rouge41.middleClick fingers 4
+```
+
+> Default is 3
+
+### Allow to click with more than the defined number of fingers.
+
+- This is useful if your second hand accidentally touches the touchpad.
+- Unfortunately, this does not serve as a palm rejection technique for huge touchpads.
+
+```ps1
+defaults write com.rouge41.middleClick allowMoreFingers true
+```
+
+> Default is false, so that the number of fingers is precise
+
+### Tapping preferences
+
+#### Max Distance Delta
+
+- The maximum distance the cursor can travel between touch and release for a tap to be considered valid.
+- The position is normalized and values go from 0 to 1.
+
+```ps1
+defaults write com.rouge41.middleClick maxDistanceDelta 0.03
+```
+
+> Default is 0.05
+
+#### Max Time Delta
+
+- The maximum interval in milliseconds between touch and release for a tap to be considered valid.
+
+```ps1
+defaults write com.rouge41.middleClick maxTimeDelta 150
+```
+
+> Default is 300
 
 ---
 

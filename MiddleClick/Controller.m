@@ -47,12 +47,15 @@ float middleclickX2, middleclickY2;
 
 BOOL needToClick;
 long fingersQua;
+BOOL allowMoreFingers;
 BOOL threeDown;
 BOOL maybeMiddleClick;
 BOOL wasThreeDown;
-NSMutableArray* currentDeviceList;
 CFMachPortRef currentEventTap;
 CFRunLoopSourceRef currentRunLoopSource;
+
+static const BOOL fastRestart = false;
+static const int wakeRestartTimeout = fastRestart ? 2 : 10;
 
 #pragma mark Implementation
 
@@ -68,6 +71,7 @@ CFRunLoopSourceRef currentRunLoopSource;
   wasThreeDown = NO;
   
   fingersQua = [[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
+  allowMoreFingers = [[NSUserDefaults standardUserDefaults] boolForKey:kAllowMoreFingers];
   
   NSString* needToClickNullable = [[NSUserDefaults standardUserDefaults] valueForKey:@"needClick"];
   needToClick = needToClickNullable ? [[NSUserDefaults standardUserDefaults] boolForKey:@"needClick"] : [self getIsSystemTapToClickDisabled];
@@ -132,28 +136,35 @@ static void stopUnstableListeners(void)
   [self registerMouseCallback:pool];
 }
 
+static NSArray* currentDeviceList = nil;
+
 static void registerTouchCallback(void)
 {
-    /// Get list of all multi touch devices
-    NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
-    currentDeviceList = deviceList;
+    /// Get list of all multi-touch devices
+    NSArray* deviceList = (NSArray*)MTDeviceCreateList(); // grab our device list
+    if (currentDeviceList != nil) {
+        [currentDeviceList release]; // Release the old list if it exists
+    }
+    currentDeviceList = deviceList; // Assign the new list (retained)
 
-    // Iterate and register callbacks for multitouch devices.
-    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+    // Iterate and register callbacks for multi-touch devices.
+    for (id device in currentDeviceList) // iterate available devices
     {
-      registerMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+        registerMTDeviceCallback((MTDeviceRef)device, touchCallback);
     }
 }
+
 static void unregisterTouchCallback(void)
 {
-    /// Get list of all multi touch devices
-    NSMutableArray* deviceList = currentDeviceList; // grab our device list
+    if (currentDeviceList == nil) return; // No device list to process
 
-    // Iterate and unregister callbacks for multitouch devices.
-    for (int i = 0; i < [deviceList count]; i++) // iterate available devices
+    // Iterate and unregister callbacks for multi-touch devices.
+    for (id device in currentDeviceList) // iterate available devices
     {
-      unregisterMTDeviceCallback((MTDeviceRef)[deviceList objectAtIndex:i], touchCallback);
+        unregisterMTDeviceCallback((MTDeviceRef)device, touchCallback);
     }
+
+    currentDeviceList = nil; // Reset the global pointer
 }
 
 - (void)registerMouseCallback:(NSAutoreleasePool*)pool
@@ -164,20 +175,18 @@ static void unregisterTouchCallback(void)
 
     /// create eventTap which listens for core grpahic events with the filter
     /// specified above (so left mouse down and up again)
-    CFMachPortRef eventTap = CGEventTapCreate(
+    currentEventTap = CGEventTapCreate(
                                               kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault,
                                               eventMask, mouseCallback, NULL);
-    currentEventTap = eventTap;
 
-    if (eventTap) {
+    if (currentEventTap) {
         // Add to the current run loop.
-        CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
-        currentRunLoopSource = runLoopSource;
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource,
+        currentRunLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, currentEventTap, 0);
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), currentRunLoopSource,
                            kCFRunLoopCommonModes);
 
         // Enable the event tap.
-        CGEventTapEnable(eventTap, true);
+        CGEventTapEnable(currentEventTap, true);
 
         // release pool before exit
         [pool release];
@@ -189,13 +198,22 @@ static void unregisterTouchCallback(void)
 }
 static void unregisterMouseCallback(void)
 {
-    // Remove from the current run loop.
-    if (currentRunLoopSource) {
-        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
-    }
-    // Disable the event tap.
+    // Disable the event tap first
     if (currentEventTap) {
         CGEventTapEnable(currentEventTap, false);
+    }
+    
+    // Remove and release the run loop source
+    if (currentRunLoopSource) {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), currentRunLoopSource, kCFRunLoopCommonModes);
+        CFRelease(currentRunLoopSource);
+        currentRunLoopSource = NULL;
+    }
+    
+    // Release the event tap
+    if (currentEventTap) {
+        CFRelease(currentEventTap);
+        currentEventTap = NULL;
     }
 }
 
@@ -217,8 +235,8 @@ static void unregisterMouseCallback(void)
 /// Can be tested by entering `pmset sleepnow` in the Terminal
 - (void)receiveWakeNote:(NSNotification*)note
 {
-  NSLog(@"System woke up, restarting...");
-  [self scheduleRestart:10];
+  NSLog(@"System woke up, restarting in %d...", wakeRestartTimeout);
+  [self scheduleRestart:wakeRestartTimeout];
 }
 
 - (BOOL)getClickMode
@@ -276,7 +294,7 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
   float maxTimeDelta = [[NSUserDefaults standardUserDefaults] integerForKey:kMaxTimeDeltaMs] / 1000.f;
   
   if (needToClick) {
-    threeDown = nFingers == fingersQua;
+    threeDown = allowMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua;
   } else {
     if (nFingers == 0) {
       NSTimeInterval elapsedTime = touchStartTime ? -[touchStartTime timeIntervalSinceNow] : 0;
@@ -313,13 +331,13 @@ int touchCallback(int device, Finger* data, int nFingers, double timestamp,
       }
     }
     
-    if (nFingers > fingersQua) {
+    if (!allowMoreFingers && nFingers > fingersQua) {
       maybeMiddleClick = NO;
       middleclickX = 0.0f;
       middleclickY = 0.0f;
     }
     
-    if (nFingers == fingersQua) {
+    if (allowMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua) {
       if (maybeMiddleClick == YES) {
         for (int i = 0; i < fingersQua; i++)
         {
