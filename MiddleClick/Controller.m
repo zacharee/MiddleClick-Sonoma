@@ -131,12 +131,12 @@ static void stopUnstableListeners(void)
   [self registerMouseCallback:pool];
 }
 
-static NSMutableArray* currentDeviceList = nil;
+static NSArray* currentDeviceList = nil;
 
 static void registerTouchCallback(void)
 {
     /// Get list of all multi-touch devices
-    NSMutableArray* deviceList = (NSMutableArray*)MTDeviceCreateList(); // grab our device list
+    NSArray* deviceList = (NSArray*)MTDeviceCreateList(); // grab our device list
     if (currentDeviceList != nil) {
         [currentDeviceList release]; // Release the old list if it exists
     }
