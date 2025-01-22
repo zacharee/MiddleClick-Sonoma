@@ -108,13 +108,14 @@ defaults write com.rouge41.middleClick fingers 4
 
 ### Allow to click with more than the defined number of fingers.
 
-- This is useful if your second hand accidentally touches the touchpad. 
+- This is useful if your second hand accidentally touches the touchpad.
+- Unfortunately, this does not serve as a palm rejection technique for huge touchpads.
 
 ```ps1
-defaults write com.rouge41.middleClick canBeMoreFingers true
+defaults write com.rouge41.middleClick allowMoreFingers true
 ```
 
-> By default it is disabled = false
+> Default is false, so that the number of fingers is precise
 
 ### Tapping preferences
 

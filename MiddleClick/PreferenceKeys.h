@@ -3,8 +3,8 @@
 #define kFingersNumDefault 3
 
 // Can be more than defined kFingersNum.
-#define kCanBeMoreFingers @"canBeMoreFingers"
-#define kCanBeMoreFingersDefault false
+#define kAllowMoreFingers @"allowMoreFingers"
+#define kAllowMoreFingersDefault false
 
 // The maximum distance the cursor can travel between touch and release for a tap to be considered valid.
 // The position is normalized and values go from 0 to 1.

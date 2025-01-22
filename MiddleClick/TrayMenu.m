@@ -76,9 +76,9 @@
   NSString* clickModeInfo = [NSString stringWithFormat:@"%@%@", @"Click", clickMode ? @"" : @" or Tap"];
   
   int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
-  BOOL canBeMoreFingers = (bool)[[NSUserDefaults standardUserDefaults] boolForKey:kCanBeMoreFingers];
+  BOOL allowMoreFingers = (bool)[[NSUserDefaults standardUserDefaults] boolForKey:kAllowMoreFingers];
   
-  NSString* fingersInfo = [NSString stringWithFormat:@" with %d%@ Fingers", fingersQua, canBeMoreFingers ? @"+" : @""];
+  NSString* fingersInfo = [NSString stringWithFormat:@" with %d%@ Fingers", fingersQua, allowMoreFingers ? @"+" : @""];
   
   [infoItem setTitle:[clickModeInfo stringByAppendingString: fingersInfo]];
   [tapToClickItem setState:clickMode ? NSControlStateValueOff : NSControlStateValueOn];

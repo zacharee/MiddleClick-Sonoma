@@ -6,13 +6,13 @@ int main(int argc, char* argv[])
 {
   id keys[] = {
     kFingersNum,
-    kCanBeMoreFingers,
+    kAllowMoreFingers,
     kMaxDistanceDelta,
     kMaxTimeDeltaMs,
   };
   id objects[] = {
     [NSNumber numberWithInt:kFingersNumDefault],
-    [NSNumber numberWithBool:kCanBeMoreFingersDefault],
+    [NSNumber numberWithBool:kAllowMoreFingersDefault],
     [NSNumber numberWithFloat:kMaxDistanceDeltaDefault],
     [NSNumber numberWithInt:kMaxTimeDeltaMsDefault],
   };
