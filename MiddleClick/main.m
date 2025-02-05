@@ -1,20 +1,19 @@
 #import "MiddleClick-Swift.h"
-#import "PreferenceKeys.h"
 #import "TrayMenu.h"
 
 int main(int argc, char* argv[])
 {
   id keys[] = {
-    kFingersNum,
-    kAllowMoreFingers,
-    kMaxDistanceDelta,
-    kMaxTimeDeltaMs,
+    MiddleClickConfig.fingersNumKey,
+    MiddleClickConfig.allowMoreFingersKey,
+    MiddleClickConfig.maxDistanceDeltaKey,
+    MiddleClickConfig.maxTimeDeltaMsKey,
   };
   id objects[] = {
-    [NSNumber numberWithInt:kFingersNumDefault],
-    [NSNumber numberWithBool:kAllowMoreFingersDefault],
-    [NSNumber numberWithFloat:kMaxDistanceDeltaDefault],
-    [NSNumber numberWithInt:kMaxTimeDeltaMsDefault],
+    [NSNumber numberWithInt:MiddleClickConfig.fingersNumDefault],
+    [NSNumber numberWithBool:MiddleClickConfig.allowMoreFingersDefault],
+    [NSNumber numberWithFloat:MiddleClickConfig.maxDistanceDeltaDefault],
+    [NSNumber numberWithInt:MiddleClickConfig.maxTimeDeltaMsDefault],
   };
   NSUInteger count = sizeof(objects) / sizeof(id);
   NSDictionary *appDefaults = [NSDictionary

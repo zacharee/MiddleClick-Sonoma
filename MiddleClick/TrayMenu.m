@@ -1,5 +1,4 @@
 #import "TrayMenu.h"
-#import "PreferenceKeys.h"
 #import "MiddleClick-Swift.h"
 #import <Cocoa/Cocoa.h>
 
@@ -75,9 +74,9 @@
   bool clickMode = [myController getClickMode];
   NSString* clickModeInfo = [NSString stringWithFormat:@"%@%@", @"Click", clickMode ? @"" : @" or Tap"];
   
-  int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kFingersNum];
-  BOOL allowMoreFingers = (bool)[[NSUserDefaults standardUserDefaults] boolForKey:kAllowMoreFingers];
-  
+  int fingersQua = (int)[[NSUserDefaults standardUserDefaults] integerForKey:MiddleClickConfig.fingersNumKey];
+  BOOL allowMoreFingers = (bool)[[NSUserDefaults standardUserDefaults] boolForKey:MiddleClickConfig.allowMoreFingersKey];
+
   NSString* fingersInfo = [NSString stringWithFormat:@" with %d%@ Fingers", fingersQua, allowMoreFingers ? @"+" : @""];
   
   [infoItem setTitle:[clickModeInfo stringByAppendingString: fingersInfo]];

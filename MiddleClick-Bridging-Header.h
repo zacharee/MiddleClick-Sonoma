@@ -5,6 +5,4 @@
 #ifndef MiddleClick_Bridging_Header_h
 #define MiddleClick_Bridging_Header_h
 
-#include "PreferenceKeys.h"
-
 #endif
