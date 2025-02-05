@@ -1,5 +1,5 @@
 #import "MiddleClick-Swift.h"
-#import "TrayMenu.h"
+#import <Cocoa/Cocoa.h>
 
 int main(int argc, char* argv[])
 {
