@@ -14,9 +14,9 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9773F1A52D53ACA600EB4372 /* TrayMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9773F1A42D53ACA600EB4372 /* TrayMenu.swift */; };
 		9773F1A72D53E6C500EB4372 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9773F1A62D53E6C500EB4372 /* main.swift */; };
-		97921C192D52BF560005EE6F /* MultitouchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97921C182D52BF560005EE6F /* MultitouchAPI.swift */; };
+		9773F1AA2D53ED4800EB4372 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9773F1A82D53ED4800EB4372 /* Controller.swift */; };
+		9773F1AB2D53ED4800EB4372 /* MultitouchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9773F1A92D53ED4800EB4372 /* MultitouchAPI.swift */; };
 		97921C1B2D52F5A50005EE6F /* MiddleClickConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */; };
-		97FDA40B2D52889300FC1027 /* Controller-Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FDA40A2D52889300FC1027 /* Controller-Swift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,9 +33,9 @@
 		8D1107320486CEB800E47090 /* MiddleClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiddleClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9773F1A42D53ACA600EB4372 /* TrayMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TrayMenu.swift; path = MiddleClick/TrayMenu.swift; sourceTree = "<group>"; };
 		9773F1A62D53E6C500EB4372 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = main.swift; path = MiddleClick/main.swift; sourceTree = "<group>"; };
-		97921C182D52BF560005EE6F /* MultitouchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitouchAPI.swift; sourceTree = "<group>"; };
+		9773F1A82D53ED4800EB4372 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Controller.swift; path = MiddleClick/Controller.swift; sourceTree = "<group>"; };
+		9773F1A92D53ED4800EB4372 /* MultitouchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MultitouchAPI.swift; path = MiddleClick/MultitouchAPI.swift; sourceTree = "<group>"; };
 		97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MiddleClickConfig.swift; path = MiddleClick/MiddleClickConfig.swift; sourceTree = "<group>"; };
-		97FDA40A2D52889300FC1027 /* Controller-Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller-Swift.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,9 +103,9 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				9773F1A82D53ED4800EB4372 /* Controller.swift */,
+				9773F1A92D53ED4800EB4372 /* MultitouchAPI.swift */,
 				9773F1A62D53E6C500EB4372 /* main.swift */,
-				97FDA40A2D52889300FC1027 /* Controller-Swift.swift */,
-				97921C182D52BF560005EE6F /* MultitouchAPI.swift */,
 				97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */,
 			);
 			name = "Other Sources";
@@ -203,10 +203,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9773F1A52D53ACA600EB4372 /* TrayMenu.swift in Sources */,
+				9773F1AA2D53ED4800EB4372 /* Controller.swift in Sources */,
+				9773F1AB2D53ED4800EB4372 /* MultitouchAPI.swift in Sources */,
 				9773F1A72D53E6C500EB4372 /* main.swift in Sources */,
 				97921C1B2D52F5A50005EE6F /* MiddleClickConfig.swift in Sources */,
-				97921C192D52BF560005EE6F /* MultitouchAPI.swift in Sources */,
-				97FDA40B2D52889300FC1027 /* Controller-Swift.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
