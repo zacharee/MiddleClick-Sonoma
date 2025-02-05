@@ -188,7 +188,7 @@ UserDefaults.standard
 
   func registerTouchCallback() {
     currentDeviceList =
-      (MTDeviceCreateList().takeUnretainedValue() as? [MTDevice]) ?? []
+      (MTDeviceCreateList()?.takeUnretainedValue() as? [MTDevice]) ?? []
 
     currentDeviceList.forEach { registerMTDeviceCallback($0, touchCallback) }
   }

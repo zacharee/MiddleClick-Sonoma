@@ -32,7 +32,6 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MiddleClick/Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MiddleClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiddleClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9753175829D5983E0065CAA7 /* PreferenceKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PreferenceKeys.h; path = MiddleClick/PreferenceKeys.h; sourceTree = "<group>"; };
-		97921C172D52B6D20005EE6F /* MultitouchPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultitouchPrivate.h; sourceTree = "<group>"; };
 		97921C182D52BF560005EE6F /* MultitouchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitouchAPI.swift; sourceTree = "<group>"; };
 		97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MiddleClickConfig.swift; path = MiddleClick/MiddleClickConfig.swift; sourceTree = "<group>"; };
 		97921C242D5384F30005EE6F /* TrayMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrayMenu.m; path = MiddleClick/TrayMenu.m; sourceTree = "<group>"; };
@@ -113,7 +112,6 @@
 				97FDA40A2D52889300FC1027 /* Controller-Swift.swift */,
 				97921C182D52BF560005EE6F /* MultitouchAPI.swift */,
 				97FDA4092D52889300FC1027 /* MiddleClick-Bridging-Header.h */,
-				97921C172D52B6D20005EE6F /* MultitouchPrivate.h */,
 				97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */,
 			);
 			name = "Other Sources";

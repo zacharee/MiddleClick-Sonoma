@@ -1,49 +1,56 @@
+import CoreFoundation
+
 // Multitouch API Bridging
-//typealias MTDeviceRef = UnsafeMutableRawPointer
-typealias MTContactCallbackFunction = (Int32, UnsafeMutablePointer<Finger>?, Int32, Double, Int32) -> Int32
+typealias MTDeviceRef = CFTypeRef
+typealias MTDevice = MTDeviceRef
+typealias MTContactCallbackFunction = (
+  Int32, UnsafeMutablePointer<Finger>?, Int32, Double, Int32
+) -> Int32
 
 struct mtPoint {
-    var x: Float
-    var y: Float
+  let x: Float
+  let y: Float
 }
 
 struct mtReadout {
-    var pos: mtPoint
-    var vel: mtPoint
+  let pos: mtPoint
+  let vel: mtPoint
 }
 
 struct Finger {
-    var frame: Int32
-    var timestamp: Double
-    var identifier: Int32
-    var state: Int32
-    var foo3: Int32
-    var foo4: Int32
-    var normalized: mtReadout
-    var size: Float
-    var zero1: Int32
-    var angle: Float
-    var majorAxis: Float
-    var minorAxis: Float
-    var mm: mtReadout
-    var zero2: (Int32, Int32)
-    var unk2: Float
+  let frame: Int32
+  let timestamp: Double
+  let identifier: Int32
+  let state: Int32
+  let foo3: Int32
+  let foo4: Int32
+  let normalized: mtReadout
+  let size: Float
+  let zero1: Int32
+  let angle: Float
+  let majorAxis: Float
+  let minorAxis: Float
+  let mm: mtReadout
+  let zero2: (Int32, Int32)
+  let unk2: Float
 }
 
 @_silgen_name("MTDeviceCreateDefault")
 func MTDeviceCreateDefault() -> MTDevice
 
 @_silgen_name("MTDeviceCreateList")
-func MTDeviceCreateList() -> [MTDevice]
+func MTDeviceCreateList() -> Unmanaged<CFMutableArray>!
 
 @_silgen_name("MTDeviceRelease")
 func MTDeviceRelease(_ device: MTDevice)
 
 @_silgen_name("MTRegisterContactFrameCallback")
-func MTRegisterContactFrameCallback(_ device: MTDevice, _ callback: MTContactCallbackFunction)
+func MTRegisterContactFrameCallback(
+  _ device: MTDevice, _ callback: MTContactCallbackFunction)
 
 @_silgen_name("MTUnregisterContactFrameCallback")
-func MTUnregisterContactFrameCallback(_ device: MTDevice, _ callback: MTContactCallbackFunction)
+func MTUnregisterContactFrameCallback(
+  _ device: MTDevice, _ callback: MTContactCallbackFunction)
 
 @_silgen_name("MTDeviceStart")
 func MTDeviceStart(_ device: MTDevice, _ something: Int32)
