@@ -1,6 +1,6 @@
 #import "TrayMenu.h"
 #import "PreferenceKeys.h"
-#import "Controller.h"
+#import "MiddleClick-Swift.h"
 #import <Cocoa/Cocoa.h>
 
 @implementation TrayMenu

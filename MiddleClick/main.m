@@ -1,4 +1,4 @@
-#import "Controller.h"
+#import "MiddleClick-Swift.h"
 #import "PreferenceKeys.h"
 #import "TrayMenu.h"
 

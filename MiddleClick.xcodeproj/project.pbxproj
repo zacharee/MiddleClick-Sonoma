@@ -9,32 +9,37 @@
 /* Begin PBXBuildFile section */
 		508EF7C4225FAC4C00353781 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508EF7C3225FAC4C00353781 /* Images.xcassets */; };
 		7569F71E1007F64500D9CE54 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7569F71D1007F64500D9CE54 /* IOKit.framework */; };
-		75A6B6600FEE3BE90071FAC0 /* TrayMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 75A6B65F0FEE3BE90071FAC0 /* TrayMenu.m */; };
 		75A6B66C0FEE87AB0071FAC0 /* MultitouchSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A6B66B0FEE87AB0071FAC0 /* MultitouchSupport.framework */; };
 		75A6B69D0FEE90530071FAC0 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A6B69C0FEE90530071FAC0 /* ApplicationServices.framework */; };
-		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		FAD94F9410A88A7800A520EC /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD94F9310A88A7800A520EC /* Controller.m */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		97921C192D52BF560005EE6F /* MultitouchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97921C182D52BF560005EE6F /* MultitouchAPI.swift */; };
+		97921C1B2D52F5A50005EE6F /* MiddleClickConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */; };
+		97921C252D5384F30005EE6F /* TrayMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 97921C242D5384F30005EE6F /* TrayMenu.m */; };
+		97921C272D5385100005EE6F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97921C262D5385100005EE6F /* main.m */; };
+		97FDA40B2D52889300FC1027 /* Controller-Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97FDA40A2D52889300FC1027 /* Controller-Swift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
-		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MiddleClick/main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		31B4299324007CB20047D442 /* MiddleClick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MiddleClick.entitlements; path = MiddleClick/MiddleClick.entitlements; sourceTree = "<group>"; };
 		508EF7C3225FAC4C00353781 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MiddleClick/Images.xcassets; sourceTree = "<group>"; };
 		7569F71D1007F64500D9CE54 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		75A6B65E0FEE3BE90071FAC0 /* TrayMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrayMenu.h; path = MiddleClick/TrayMenu.h; sourceTree = "<group>"; };
-		75A6B65F0FEE3BE90071FAC0 /* TrayMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrayMenu.m; path = MiddleClick/TrayMenu.m; sourceTree = "<group>"; };
 		75A6B66B0FEE87AB0071FAC0 /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = /System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<absolute>"; };
 		75A6B69C0FEE90530071FAC0 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MiddleClick/Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MiddleClick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiddleClick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9753175829D5983E0065CAA7 /* PreferenceKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PreferenceKeys.h; path = MiddleClick/PreferenceKeys.h; sourceTree = "<group>"; };
-		FAD94F9210A88A7800A520EC /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Controller.h; path = MiddleClick/Controller.h; sourceTree = "<group>"; };
-		FAD94F9310A88A7800A520EC /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Controller.m; path = MiddleClick/Controller.m; sourceTree = "<group>"; };
+		97921C172D52B6D20005EE6F /* MultitouchPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultitouchPrivate.h; sourceTree = "<group>"; };
+		97921C182D52BF560005EE6F /* MultitouchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultitouchAPI.swift; sourceTree = "<group>"; };
+		97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MiddleClickConfig.swift; path = MiddleClick/MiddleClickConfig.swift; sourceTree = "<group>"; };
+		97921C242D5384F30005EE6F /* TrayMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrayMenu.m; path = MiddleClick/TrayMenu.m; sourceTree = "<group>"; };
+		97921C262D5385100005EE6F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MiddleClick/main.m; sourceTree = "<group>"; };
+		97921C292D5385870005EE6F /* TrayMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrayMenu.h; path = MiddleClick/TrayMenu.h; sourceTree = "<group>"; };
+		97FDA4092D52889300FC1027 /* MiddleClick-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MiddleClick-Bridging-Header.h"; sourceTree = "<group>"; };
+		97FDA40A2D52889300FC1027 /* Controller-Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Controller-Swift.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +60,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				75A6B65E0FEE3BE90071FAC0 /* TrayMenu.h */,
-				75A6B65F0FEE3BE90071FAC0 /* TrayMenu.m */,
+				97921C292D5385870005EE6F /* TrayMenu.h */,
+				97921C242D5384F30005EE6F /* TrayMenu.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -103,10 +108,13 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				FAD94F9210A88A7800A520EC /* Controller.h */,
-				FAD94F9310A88A7800A520EC /* Controller.m */,
-				29B97316FDCFA39411CA2CEA /* main.m */,
+				97921C262D5385100005EE6F /* main.m */,
 				9753175829D5983E0065CAA7 /* PreferenceKeys.h */,
+				97FDA40A2D52889300FC1027 /* Controller-Swift.swift */,
+				97921C182D52BF560005EE6F /* MultitouchAPI.swift */,
+				97FDA4092D52889300FC1027 /* MiddleClick-Bridging-Header.h */,
+				97921C172D52B6D20005EE6F /* MultitouchPrivate.h */,
+				97921C1A2D52F5A50005EE6F /* MiddleClickConfig.swift */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -164,6 +172,7 @@
 				TargetAttributes = {
 					8D1107260486CEB800E47090 = {
 						DevelopmentTeam = R2294BC6J8;
+						LastSwiftMigration = 1620;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -201,9 +210,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				75A6B6600FEE3BE90071FAC0 /* TrayMenu.m in Sources */,
-				FAD94F9410A88A7800A520EC /* Controller.m in Sources */,
+				97921C272D5385100005EE6F /* main.m in Sources */,
+				97921C252D5384F30005EE6F /* TrayMenu.m in Sources */,
+				97921C1B2D52F5A50005EE6F /* MiddleClickConfig.swift in Sources */,
+				97921C192D52BF560005EE6F /* MultitouchAPI.swift in Sources */,
+				97FDA40B2D52889300FC1027 /* Controller-Swift.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +226,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = MiddleClick/MiddleClick.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -235,12 +247,16 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/MiddleClick/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rouge41.middleClick;
 				PRODUCT_NAME = MiddleClick;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "MiddleClick-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -249,6 +265,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = MiddleClick/MiddleClick.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -267,12 +284,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/MiddleClick/Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LOCALIZED_STRING_SWIFTUI_SUPPORT = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 2.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rouge41.middleClick;
 				PRODUCT_NAME = MiddleClick;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "MiddleClick-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};

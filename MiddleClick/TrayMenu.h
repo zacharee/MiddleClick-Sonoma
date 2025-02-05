@@ -1,5 +1,6 @@
-#import "Controller.h"
+#import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
+#import "MiddleClick-Swift.h"
 
 @interface TrayMenu : NSObject <NSFileManagerDelegate> {
 @private
