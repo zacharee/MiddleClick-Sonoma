@@ -8,7 +8,7 @@ import Cocoa
   var accessibilityPermissionActionItem: NSMenuItem!
   var statusItem: NSStatusItem!
 
-  @objc init(controller: Controller) {
+  init(controller: Controller) {
     myController = controller
     super.init()
   }
@@ -82,7 +82,7 @@ import Cocoa
   }
 
   // Set the checks based on configuration
-  @objc func setChecks() {
+  func setChecks() {
     let clickMode = myController.getClickMode()
     let clickModeInfo = "Click" + (clickMode ? "" : " or Tap")
 

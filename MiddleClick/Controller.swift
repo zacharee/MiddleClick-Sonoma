@@ -24,7 +24,7 @@ UserDefaults.standard
 @MainActor public var allowMoreFingers = UserDefaults.standard.bool(
   forKey: MiddleClickConfig.allowMoreFingersKey)
 
-@objc @MainActor class Controller: NSObject {
+@MainActor class Controller: NSObject {
   weak var restartTimer: Timer?
   var currentEventTap: CFMachPort?
   var currentRunLoopSource: CFRunLoopSource?
@@ -36,7 +36,7 @@ UserDefaults.standard
 
   var currentDeviceList: [MTDevice] = []
 
-  @objc func start() {
+  func start() {
     NSLog("Starting all listeners...")
 
     needToClick =
@@ -117,16 +117,16 @@ UserDefaults.standard
     scheduleRestart(Controller.wakeRestartTimeout)
   }
 
-  @objc func getClickMode() -> Bool {
+  func getClickMode() -> Bool {
     return needToClick
   }
 
-  @objc func setMode(_ click: Bool) {
+  func setMode(_ click: Bool) {
     UserDefaults.standard.set(click, forKey: MiddleClickConfig.needClickKey)
     needToClick = click
   }
 
-  @objc func resetClickMode() {
+  func resetClickMode() {
     UserDefaults.standard.removeObject(forKey: MiddleClickConfig.needClickKey)
     needToClick = getIsSystemTapToClickDisabled()
   }

@@ -1,7 +1,6 @@
 import Foundation
 
-/// TODO: rewrite to simple struct after fully migrating to Swift
-@objcMembers class MiddleClickConfig: NSObject {
+struct MiddleClickConfig {
   static let fingersNumKey = "fingers"
   static let fingersNumDefault: Int8 = 3
 
