@@ -1,7 +1,7 @@
 import Cocoa
 
 @MainActor class TrayMenu: NSObject, NSApplicationDelegate {
-  var myController: Controller?
+  let myController: Controller
   var infoItem: NSMenuItem!
   var tapToClickItem: NSMenuItem!
   var accessibilityPermissionStatusItem: NSMenuItem!
@@ -9,8 +9,8 @@ import Cocoa
   var statusItem: NSStatusItem!
 
   @objc init(controller: Controller) {
-    super.init()
     myController = controller
+    super.init()
   }
 
   // Initialize accessibility permission status
@@ -25,8 +25,8 @@ import Cocoa
         .scheduledTimer(
           timeInterval: 0.3,
           target: self,
-          selector: #selector(initAccessibilityPermissionStatus),
-          userInfo: menu,
+          selector: #selector(initAccessibilityPermissionStatus(menu:)),
+          userInfo: nil,
           repeats: false
         )
     }
@@ -71,19 +71,19 @@ import Cocoa
 
   // Toggle Tap to Click
   @objc func toggleTapToClick(sender: NSButton) {
-    myController?.setMode(sender.state == .on)
+    myController.setMode(sender.state == .on)
     setChecks()
   }
 
   // Reset Tap to Click
   @objc func resetTapToClick(sender: NSButton) {
-    myController?.resetClickMode()
+    myController.resetClickMode()
     setChecks()
   }
 
   // Set the checks based on configuration
   @objc func setChecks() {
-    let clickMode = myController?.getClickMode() ?? false
+    let clickMode = myController.getClickMode()
     let clickModeInfo = "Click" + (clickMode ? "" : " or Tap")
 
     let fingersQua = UserDefaults.standard.integer(forKey: MiddleClickConfig.fingersNumKey)
@@ -160,7 +160,7 @@ import Cocoa
     let menu = createMenu()
 
     let icon = NSImage(named: "StatusIcon") ?? NSImage()
-    icon.size = CGSize(width: 24, height: 24) // TODO? increase size
+    icon.size = CGSize(width: 24, height: 24)  // TODO? increase size
 
     let oldBusted = (floor(NSAppKitVersion.current.rawValue) <= NSAppKitVersion.macOS10_9.rawValue)
     if !oldBusted {
