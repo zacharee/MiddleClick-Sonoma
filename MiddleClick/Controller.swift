@@ -10,6 +10,7 @@ import IOKit.hid
 @MainActor public var wasThreeDown = false
 @MainActor public var maybeMiddleClick = false
 @MainActor public var touchStartTime: Date?
+@MainActor var naturalMiddleClickLastTime: Date?
 @MainActor public var middleClickX: Float = 0.0
 @MainActor public var middleClickY: Float = 0.0
 @MainActor public var middleClickX2: Float = 0.0
@@ -220,12 +221,12 @@ UserDefaults.standard
 
 @MainActor let mouseCallback: CGEventTapCallBack = {
   proxy, type, event, refcon in
-  if needToClick {
     if threeDown && (type == .leftMouseDown || type == .rightMouseDown) {
       wasThreeDown = true
       event.type = .otherMouseDown
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
       threeDown = false
+      naturalMiddleClickLastTime = Date()
     }
 
     if wasThreeDown && (type == .leftMouseUp || type == .rightMouseUp) {
@@ -233,20 +234,29 @@ UserDefaults.standard
       event.type = .otherMouseUp
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
     }
-  }
 
   return Unmanaged.passUnretained(event)
+}
+
+@MainActor func shouldPreventEmulation() -> Bool {
+  if let naturalLastTime = naturalMiddleClickLastTime {
+    let elapsedTimeSinceNatural = -naturalLastTime.timeIntervalSinceNow;
+    if elapsedTimeSinceNatural <= maxTimeDelta * 0.75 {
+      return true
+    }
+  }
+  return false
 }
 
 @MainActor func touchCallback(
   device: Int32, data: UnsafeMutablePointer<Finger>?, nFingers: Int32,
   timestamp: Double, frame: Int32
 ) -> Int32 {
-  if needToClick {
     threeDown =
       allowMoreFingers ? nFingers >= fingersQua : nFingers == fingersQua
-    return 0
-  }
+
+  let tapToClickEnabled = !needToClick;
+  if (!tapToClickEnabled) { return 0; }
 
   if nFingers == 0 {
     if let startTime = touchStartTime {
@@ -258,7 +268,9 @@ UserDefaults.standard
           abs(middleClickX - middleClickX2)
           + abs(middleClickY - middleClickY2)
         if delta < maxDistanceDelta {
-          emulateMiddleClick()
+          if !shouldPreventEmulation() {
+            emulateMiddleClick()
+          }
         }
       }
     }
