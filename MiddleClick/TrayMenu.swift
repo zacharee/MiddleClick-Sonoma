@@ -15,7 +15,7 @@ import Cocoa
 
   // Initialize accessibility permission status
   @objc func initAccessibilityPermissionStatus(menu: NSMenu) {
-    let hasAccessibilityPermission = AXIsProcessTrusted()
+    let hasAccessibilityPermission = SystemPermissions.detectAccessibilityIsGranted(forcePrompt: true)
 
     updateAccessibilityPermissionStatus(
       menu: menu, hasAccessibilityPermission: hasAccessibilityPermission)
