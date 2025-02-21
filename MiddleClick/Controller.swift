@@ -237,7 +237,7 @@ UserDefaults.standard
     }
   }
 
-  return Unmanaged.passRetained(event)
+  return Unmanaged.passUnretained(event)
 }
 
 @MainActor func touchCallback(
