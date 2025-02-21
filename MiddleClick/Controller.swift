@@ -150,9 +150,7 @@ UserDefaults.standard
   }
 
   func registerMouseCallback() {
-    let eventMask = CGEventMask(
-      CGEventType.leftMouseDown.rawValue | CGEventType.leftMouseUp.rawValue | CGEventType.rightMouseDown.rawValue | CGEventType.rightMouseUp.rawValue
-    )
+    let eventMask = CGEventMask.from(.leftMouseDown, .leftMouseUp, .rightMouseDown, .rightMouseUp)
     currentEventTap = CGEvent.tapCreate(
       tap: .cghidEventTap, place: .headInsertEventTap, options: .defaultTap,
       eventsOfInterest: eventMask, callback: mouseCallback, userInfo: nil)
@@ -370,4 +368,16 @@ func unregisterMTDeviceCallback(
   MTUnregisterContactFrameCallback(device, callback)
   MTDeviceStop(device)
   MTDeviceRelease(device)
+}
+
+extension CGEventMask {
+  static func from(_ types: CGEventType...) -> Self {
+    var mask = 0
+
+    for type in types {
+      mask |= (1 << type.rawValue)
+    }
+
+    return Self(mask)
+  }
 }
