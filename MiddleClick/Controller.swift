@@ -151,8 +151,8 @@ UserDefaults.standard
 
   func registerMouseCallback() {
     let eventMask = CGEventMask(
-      1 << CGEventType.leftMouseDown.rawValue | 1
-        << CGEventType.leftMouseUp.rawValue)
+      CGEventType.leftMouseDown.rawValue | CGEventType.leftMouseUp.rawValue | CGEventType.rightMouseDown.rawValue | CGEventType.rightMouseUp.rawValue
+    )
     currentEventTap = CGEvent.tapCreate(
       tap: .cghidEventTap, place: .headInsertEventTap, options: .defaultTap,
       eventsOfInterest: eventMask, callback: mouseCallback, userInfo: nil)
@@ -223,14 +223,14 @@ UserDefaults.standard
 @MainActor let mouseCallback: CGEventTapCallBack = {
   proxy, type, event, refcon in
   if needToClick {
-    if threeDown && type == .leftMouseDown {
+    if threeDown && (type == .leftMouseDown || type == .rightMouseDown) {
       wasThreeDown = true
       event.type = .otherMouseDown
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
       threeDown = false
     }
 
-    if wasThreeDown && type == .leftMouseUp {
+    if wasThreeDown && (type == .leftMouseUp || type == .rightMouseUp) {
       wasThreeDown = false
       event.type = .otherMouseUp
       event.setIntegerValueField(.mouseEventButtonNumber, value: kCGMouseButtonCenter)
